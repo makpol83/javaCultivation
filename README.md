@@ -1,2 +1,2 @@
 # javaCultivation
-This project aims to create a discord bot that manages an ecosystem similar to a RPG game.
+This project aims to create a discord bot that manages an ecosystem similar to an RPG game.
