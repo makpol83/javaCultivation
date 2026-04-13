@@ -60,7 +60,7 @@ public class Database {
 
         //Disease levels table
         String sqlDiseaseInjuryLevels =  Database.getDiseaseInjuryLevelsTableCreation();
-        
+
         //Character disease Injury
         String sqlCharacterDiseaseInjury = Database.getCharacterDiseaseInjuryTableCreation();
 
@@ -70,7 +70,7 @@ public class Database {
             stmt.execute(sqlCharacters);
             System.out.println("Characters table created.");
 
-            stmt.execute(sqlCharacterStats.toString());
+            stmt.execute(sqlCharacterStats);
             System.out.println("Characters stats table created.");
 
             stmt.execute(sqlCharacterStatModifiers);
@@ -82,7 +82,7 @@ public class Database {
             stmt.execute(sqlPyshicalData);
             System.out.println("Character pyshical data table created.");
 
-            stmt.execute(sqlCultivationData.toString());
+            stmt.execute(sqlCultivationData);
             System.out.println("Character cultivation data table created.");
             
             stmt.execute(sqlLoreData);
