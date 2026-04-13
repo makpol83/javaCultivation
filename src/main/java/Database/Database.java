@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.xml.crypto.Data;
-
 import Character.Cultivation.CultivationRange;
 import Character.Cultivation.CultivationRealm;
 import Character.Stats.StatQuality;
@@ -64,6 +62,26 @@ public class Database {
         //Character disease Injury
         String sqlCharacterDiseaseInjury = Database.getCharacterDiseaseInjuryTableCreation();
 
+        //Inventories on the db
+        String sqlInventories = Database.getInventoryTableCreation();
+
+        //Extensions of the inventories
+        String sqlInventoriesExtension = Database.getInventoryExtensionTableCreation();
+
+        //Relation between inventories and extensions
+        String sqlInventoryAssociatedExtension = Database.getInventoryAssociatedExtensionTableCreation();
+
+        //Object types
+        String sqlObjectType = Database.getObjectTypeTableCreation();
+
+        //Object instances
+        String sqlObject = Database.getObjectTableCreation();
+
+        //Inventory object relation
+        String sqlInventoryObject = Database.getInventoryObjectTableCreation();
+
+        //Object type related modifier
+        String sqlObjectModifier = Database.getObjectModifierTableCreation();
 
         //Table creation
         try (Statement stmt = connection.createStatement()) {
@@ -96,6 +114,27 @@ public class Database {
 
             stmt.execute(sqlCharacterDiseaseInjury);
             System.out.println("Character disease injury table created.");
+
+            stmt.execute(sqlInventories);
+            System.out.println("Inventories table created.");
+
+            stmt.execute(sqlInventoriesExtension);
+            System.out.println("Inventory extensions table created.");
+
+            stmt.execute(sqlInventoryAssociatedExtension);
+            System.out.println("Inventory associated extensions table created.");
+
+            stmt.execute(sqlObjectType);
+            System.out.println("Object Type table created.");
+
+            stmt.execute(sqlObject);
+            System.out.println("Object instances table created.");
+
+            stmt.execute(sqlInventoryObject);
+            System.out.println("Inventory object relations table created.");
+
+            stmt.execute(sqlObjectModifier);
+            System.out.println("Object type modifiers table created.");
         } catch (SQLException e) {
             System.err.println("Error creating tables: " + e.getMessage());
         }
@@ -103,7 +142,7 @@ public class Database {
 
     private static String getCharacterTableCreation(){
         return  "CREATE TABLE IF NOT EXISTS characters (" +
-                "id INTEGER PRIMARY KEY," +
+                "character_id INTEGER PRIMARY KEY," +
                 "owner TEXT NOT NULL," +
                 "name TEXT NOT NULL" +
                 ");";
@@ -129,7 +168,7 @@ public class Database {
                                         qualityLevels.toString() +"'NO_QUALITY')),");
         }
 
-        sbStats.append("FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE);");
+        sbStats.append("FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE);");
 
         return sbStats.toString();
     }
@@ -137,9 +176,9 @@ public class Database {
     private static String getCharacterStatModifiersTableCreation(){
         return  "CREATE TABLE IF NOT EXISTS characterStatsModifiers (" +
                 "modifier_id INTEGER PRIMARY KEY AUTOINCREMENT," + 
-                "character_id INTEGER NOT NULL," + 
-                "modifier_value REAL DEFAULT 1, " + 
-                "FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE);";
+                "modified_stat_name TEXT NOT NULL DEFAULT 'Not assigned'," +
+                "modifier_value REAL DEFAULT 1 " + 
+                ");";
     }
 
     private static String getCharacterLevelProgressionTableCreation(){
@@ -148,7 +187,7 @@ public class Database {
                 "level INTEGER DEFAULT 1," +
                 "xp_needed_to_lvlup REAL DEFAULT 1," + 
                 "xp_actual REAL DEFAULT 1," +
-                "FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE);";
+                "FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE);";
     }
 
     private static String getCharacterPyshicalDataTableCreation(){
@@ -157,7 +196,7 @@ public class Database {
                 "lifespan REAL DEFAULT 80," +
                 "age INTEGER DEFAULT 20," + 
                 "gender TEXT DEFAULT 'No gender assigned'," +
-                "FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE);";
+                "FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE);";
     }
 
     private static String getCharacterCultivationDataTableCreation(){
@@ -177,7 +216,7 @@ public class Database {
             sqlCultivationData.append("'" + range.name() + "',");
         }
         sqlCultivationData.append("'NO_RANGE')),")
-                          .append("FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE);");
+                          .append("FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE);");
 
         return sqlCultivationData.toString();
     }
@@ -187,12 +226,12 @@ public class Database {
                 "character_id INTEGER  PRIMARY KEY," + 
                 "pyshical_appearance TEXT DEFAULT 'No appearance defined'," +
                 "past TEXT DEFAULT 'No past defined'," + 
-                "FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE);";
+                "FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE);";
     }
 
     private static String getDiseaseInjuryTypesTableCreation(){
         return  "CREATE TABLE IF NOT EXISTS diseaseInjuryTypes (" +
-                "id INTEGER PRIMARY KEY," +
+                "disease_injury_id INTEGER PRIMARY KEY," +
                 "name TEXT NOT NULL DEFAULT 'No name'," +
                 "description TEXT NOT NULL DEFAULT 'No description'," +
                 "cause TEXT NOT NULL DEFAULT 'No cause'," +
@@ -206,7 +245,7 @@ public class Database {
                 "severity_level INTEGER," +
                 "effect TEXT NOT NULL DEFAULT 'No effect'," +
                 "PRIMARY KEY (disease_injury_id, severity_level)," +
-                "FOREIGN KEY (disease_injury_id) REFERENCES diseaseInjuryTypes(id) ON DELETE CASCADE);";
+                "FOREIGN KEY (disease_injury_id) REFERENCES diseaseInjuryTypes(disease_injury_id) ON DELETE CASCADE);";
     }
 
     private static String getCharacterDiseaseInjuryTableCreation(){
@@ -215,8 +254,73 @@ public class Database {
                 "disease_injury_id INTEGER," +
                 "severity_level INTEGER NOT NULL DEFAULT 1," +
                 "PRIMARY KEY (character_id, disease_injury_id)," +
-                "FOREIGN KEY (character_id) REFERENCES characters(id) ON DELETE CASCADE," +
-                "FOREIGN KEY (disease_injury_id) REFERENCES diseaseInjuryTypes(id) ON DELETE CASCADE" +
+                "FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE," +
+                "FOREIGN KEY (disease_injury_id) REFERENCES diseaseInjuryTypes(disease_injury_id) ON DELETE CASCADE" +
+                ");";
+    }
+
+    private static String getInventoryTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS inventories (" +
+                "inventory_id INTEGER PRIMARY KEY," + 
+                "base_capacity INTEGER DEFAULT 1" +
+                ");";
+    }
+
+    private static String getInventoryExtensionTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS inventoryExtensions (" +
+                "extension_id INTEGER PRIMARY KEY," + 
+                "added_capacity INTEGER DEFAULT 1" +
+                ");";
+    }
+
+    private static String getInventoryAssociatedExtensionTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS inventoriesExtensions (" +
+                "inventory_id INTEGER," + 
+                "extension_id INTEGER," +
+                "PRIMARY KEY (inventory_id, extension_id)," +
+                "FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_id) ON DELETE CASCADE," +
+                "FOREIGN KEY (extension_id) REFERENCES inventoryExtensions(extension_id) ON DELETE CASCADE" +
+                ");";
+    }
+
+    private static String getObjectTypeTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS objectType (" +
+                "object_type_id INTEGER PRIMARY KEY," + 
+                "name TEXT NOT NULL DEFAULT 'No name assigned'," +
+                "description TEXT NOT NULL DEFAULT 'No description assigned'," +
+                "on_rol_effect TEXT NOT NULL DEFAULT ' No effect assigned'," +
+                "is_equippable INTEGER NOT NULL DEFAULT 0," +
+                "is_consumable INTEGER NOT NULL DEFAULT 0" +
+                ");";
+    }
+
+    private static String getObjectTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS objects (" +
+                "object_id INTEGER," + 
+                "object_type_id INTEGER," + 
+                "notes_added TEXT NOT NULL DEFAULT 'No notes assigned'," +
+                "PRIMARY KEY (object_id, object_type_id)," +
+                "FOREIGN KEY (object_type_id) REFERENCES objectType(object_type_id) ON DELETE CASCADE" +
+                ");";
+    }
+
+    private static String getInventoryObjectTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS objects (" +
+                "object_id INTEGER," + 
+                "inventory_id INTEGER," +
+                "PRIMARY KEY (object_id, inventory_id)," +
+                "FOREIGN KEY (object_id) REFERENCES objects(object_id) ON DELETE CASCADE," +
+                "FOREIGN KEY (inventory_id) REFERENCES inventories(inventory_id) ON DELETE CASCADE" +
+                ");";
+    }
+
+    private static String getObjectModifierTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS objectModifiers (" +
+                "object_type_id INTEGER NOT NULL," + 
+                "modifier_id INTEGER NOT NULL," + 
+                "PRIMARY KEY (object_type_id, modifier_id)," +
+                "FOREIGN KEY (object_type_id) REFERENCES objectType(object_type_id) ON DELETE CASCADE," +
+                "FOREIGN KEY (modifier_id) REFERENCES statModifiers(modifier_id) ON DELETE CASCADE" +
                 ");";
     }
 }
