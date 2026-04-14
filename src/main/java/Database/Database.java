@@ -35,8 +35,14 @@ public class Database {
         //Character table
         String sqlCharacters =  Database.getCharacterTableCreation();
 
+        //Stats groups table
+        String sqlStats = Database.getStatsTableCreation();
+
         //Character stats table
         String sqlCharacterStats = Database.getCharacterStatsTableCreation();        
+
+        //Stats instances table
+        String sqlStatsInstances = Database.getStatsInstancesTableCreation();
 
         //Stats modifiers table
         String sqlCharacterStatModifiers = Database.getCharacterStatModifiersTableCreation();
@@ -88,8 +94,14 @@ public class Database {
             stmt.execute(sqlCharacters);
             System.out.println("Characters table created.");
 
+            stmt.execute(sqlStats);
+            System.out.println("Stats block table created.");
+
             stmt.execute(sqlCharacterStats);
             System.out.println("Characters stats table created.");
+
+            stmt.execute(sqlStatsInstances);
+            System.out.println("Stats instances table created.");
 
             stmt.execute(sqlCharacterStatModifiers);
             System.out.println("Characters stats modifiers table created.");
@@ -148,7 +160,15 @@ public class Database {
                 ");";
     }
 
+    private static String getStatsTableCreation(){
+        return  "CREATE TABLE IF NOT EXISTS stats (" +
+                "stats_id INTEGER PRIMARY KEY AUTOINCREMENT," + 
+                "general_stat_modifier REAL DEFAULT 1" +
+                ");";
+    }
+
     private static String getCharacterStatsTableCreation(){
+        /*
         //Auxiliar string with qualities
         StringBuilder qualityLevels = new StringBuilder();
         for(StatQuality qualityLevel : StatQuality.values()){
@@ -170,7 +190,40 @@ public class Database {
 
         sbStats.append("FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE);");
 
-        return sbStats.toString();
+        */
+        return  "CREATE TABLE IF NOT EXISTS characterStats (" +
+                "character_id INTEGER," + 
+                "stats_id INTEGER," + 
+                "PRIMARY KEY (character_id, stats_id)," +
+                "FOREIGN KEY (character_id) REFERENCES characters(character_id) ON DELETE CASCADE," +
+                "FOREIGN KEY (stats_id) REFERENCES stats(stats_id) ON DELETE CASCADE);";
+
+    }
+
+    private static String getStatsInstancesTableCreation(){
+        //Auxiliar string with qualities
+        StringBuilder qualityLevels = new StringBuilder();
+        for(StatQuality qualityLevel : StatQuality.values()){
+            qualityLevels.append("'"+qualityLevel.name()+"',");
+        }
+
+        //Auxiliar string with types
+        StringBuilder types = new StringBuilder();
+        for(StatType type : StatType.values()){
+            qualityLevels.append("'"+type.name()+"',");
+        }
+
+        return  "CREATE TABLE IF NOT EXISTS statsInstances (" +
+                "stat_id INTEGER PRIMARY KEY," +
+                "stats_id INTEGER NOT NULL," + 
+                "quality TEXT NOT NULL DEFAULT 'NO_QUALITY' CHECK (" +
+                "quality IN (" + 
+                qualityLevels.toString() +"'NO_QUALITY'))," +
+                "type TEXT NOT NULL DEFAULT 'NO_TYPE' CHECK (" +
+                "type IN (" + 
+                types.toString() +"'NO_TYPE'))," +
+                "FOREIGN KEY (stats_id) REFERENCES stats(stat_id) ON DELETE CASCADE" +
+                ");";
     }
     
     private static String getCharacterStatModifiersTableCreation(){
