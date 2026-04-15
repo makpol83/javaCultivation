@@ -10,7 +10,7 @@ import Character.Cultivation.CultivationRealm;
 import Character.Stats.StatQuality;
 import Character.Stats.StatType;
 
-public class Database {
+public abstract class Database {
     public static Connection connection;
 
     public static void connect(){
