@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import Character.Cultivation.CultivationRange;
-import Character.Cultivation.CultivationRealm;
-import Character.Stats.StatQuality;
-import Character.Stats.StatType;
+import Entities.Character.Cultivation.CultivationRange;
+import Entities.Character.Cultivation.CultivationRealm;
+import Entities.Character.Stats.StatData.StatQuality;
+import Entities.Character.Stats.StatData.StatType;
 
 public abstract class Database {
     public static Connection connection;

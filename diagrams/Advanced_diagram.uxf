@@ -1,0 +1,324 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>2290</x><y>590</y><w>360</w><h>220</h></coordinates><panel_attributes>PowerStepType
+--
+- name : String
+- description : String
+- minimumStatValue : int
+- maximumStatValue : int //By normal level up, can be surpassed
+
+--
++ getPowerStepName() : String
++ getAdvanceTypes() : AdvanceType[1..*]
++ getNextPowerStep() : PowerStepType
++ getPreviousPowerStep() : PowerStepType
++ getMinimumStatValue() : int
++ getMaximumStatValue() : int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2870</x><y>590</y><w>240</w><h>190</h></coordinates><panel_attributes>PowerSystem
+--
+- name : String
+- description : String
+--
++ getFirstPowerStep() : PowerStepType</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2640</x><y>670</y><w>250</w><h>50</h></coordinates><panel_attributes>lt=&lt;-&gt;
+m1=1..*
+m2=1
+r1=powerLevels
+r2=powerData</panel_attributes><additional_attributes>10;20;230;20</additional_attributes></element><element><id>Relation</id><coordinates><x>2180</x><y>600</y><w>130</w><h>90</h></coordinates><panel_attributes>lt=&lt;-&gt;
+m1=0..n
+r1=subLevels
+r2=parentLevel
+m2=0..1</panel_attributes><additional_attributes>110;20;10;20;10;60;110;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2600</x><y>190</y><w>330</w><h>100</h></coordinates><panel_attributes>&lt;&lt;interface&gt;&gt;
+CharacterModifier
+--
+setChanges(Character) : void
+reverseChanges(Character) : boolean
+pauseChanges(Character) : void</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>3310</x><y>680</y><w>330</w><h>50</h></coordinates><panel_attributes>DataRequirementType
+--
+isFulfilled(Character) : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2620</x><y>800</y><w>110</w><h>120</h></coordinates><panel_attributes>lt=&lt;-
+r1=advanceTypes
+m1=1..*
+m2=1</panel_attributes><additional_attributes>10;100;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2620</x><y>280</y><w>110</w><h>330</h></coordinates><panel_attributes>lt=&lt;-
+r1=DataModifiers
+m2=1
+m1=0..n</panel_attributes><additional_attributes>10;10;10;310</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2610</x><y>900</y><w>300</w><h>190</h></coordinates><panel_attributes>AdvanceType
+--
+- statMultiplier : double
+--
++ canAdvance(Character)
++ getFulfilledRequirements() : </panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2900</x><y>690</y><w>430</w><h>250</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+r1=dataRequirements</panel_attributes><additional_attributes>410;20;250;20;250;230;10;230</additional_attributes></element><element><id>UMLClass</id><coordinates><x>3310</x><y>760</y><w>330</w><h>50</h></coordinates><panel_attributes>AbstractRequirementType
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2900</x><y>760</y><w>430</w><h>250</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+r1=abstractRequirements</panel_attributes><additional_attributes>410;20;310;20;310;230;10;230</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2280</x><y>190</y><w>260</w><h>100</h></coordinates><panel_attributes>SpecialCharacterModifiers
+--
+- AbstractModifier : String
+ADD ASOCIATED ITEMS//SOMETHING
+--
++ getAbstractModifier() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2450</x><y>280</y><w>130</w><h>330</h></coordinates><panel_attributes>lt=&lt;-
+r1=AbstractModifiers
+m1=0..n
+m2=1</panel_attributes><additional_attributes>10;10;10;310</additional_attributes></element><element><id>Relation</id><coordinates><x>3600</x><y>530</y><w>30</w><h>170</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;150</additional_attributes></element><element><id>UMLClass</id><coordinates><x>3310</x><y>440</y><w>330</w><h>100</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+Requirement
+--
+getRequirementName() : String
+getRequirementDescription() : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>3620</x><y>530</y><w>90</w><h>280</h></coordinates><panel_attributes>lt=&lt;&lt;.</panel_attributes><additional_attributes>10;10;10;110;70;110;70;260;20;260</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1340</x><y>660</y><w>360</w><h>90</h></coordinates><panel_attributes>StatInstance
+--
+- isVisible : boolean
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1340</x><y>160</y><w>360</w><h>270</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+StatType
+--
++ STRENGTH
++ VELOCITY
++ AGILITY
++ RESISTANCE
++ VITALITY
++ INTELLIGENCE
++ REFLEX
++ PRESENCE
++ COURAGE
++ SPIRITUAL_ENERGY
++ QI_QUANTITY
++ CONCENTRATION
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1870</x><y>200</y><w>360</w><h>220</h></coordinates><panel_attributes>StatCategory
+--
++ PYSHICAL
++ MENTAL
++ SPIRITUAL</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1690</x><y>350</y><w>200</w><h>50</h></coordinates><panel_attributes>lt=&lt;-&gt;
+m1=1
+r1=category
+m2=0..n
+r2=statTypes</panel_attributes><additional_attributes>180;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1500</x><y>420</y><w>50</w><h>260</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=type</panel_attributes><additional_attributes>10;10;10;240</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1010</x><y>420</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+StatQuality
+--
++ USELESS
++ LOW_PROFICIENCY
++ BELOW_AVERAGE
++ AVERAGE
++ UNCOMMON
++ PROFICCIENT
++ GENIUS
+--
+- multiplierMinimum : double
+- multiplierMaximum : double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1170</x><y>600</y><w>190</w><h>100</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=quality
+m2=*
+</panel_attributes><additional_attributes>10;10;10;70;170;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1080</x><y>0</y><w>250</w><h>50</h></coordinates><panel_attributes>StatModifier
+--
+- multiplierModifier : double</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1320</x><y>20</y><w>260</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+r1=statAffected
+m1=1
+m2=1</panel_attributes><additional_attributes>240;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1560</x><y>10</y><w>370</w><h>70</h></coordinates><panel_attributes>&lt;&lt;interface&gt;&gt;
+StatModifable
+--
++ name() : double
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1600</x><y>70</y><w>30</w><h>110</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;90</additional_attributes></element><element><id>Relation</id><coordinates><x>1900</x><y>70</y><w>30</w><h>150</h></coordinates><panel_attributes>lt=&lt;..</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element><element><id>Relation</id><coordinates><x>1270</x><y>40</y><w>120</w><h>640</h></coordinates><panel_attributes>lt=&lt;-
+r1=modifiers
+m1=*
+m2=*</panel_attributes><additional_attributes>10;10;10;510;90;510;90;620</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1680</x><y>510</y><w>310</w><h>80</h></coordinates><panel_attributes>StatInstanceHistory
+--
++ getStatFoundation() : double //Calcular respecto al valor maximo con el de cada instancia al avanzar de step</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1580</x><y>530</y><w>120</w><h>150</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=history</panel_attributes><additional_attributes>100;20;10;20;10;130</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1820</x><y>630</y><w>310</w><h>80</h></coordinates><panel_attributes>PowerStepStatFinalInstance
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2100</x><y>700</y><w>210</w><h>90</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=powerStep</panel_attributes><additional_attributes>190;60;10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1690</x><y>700</y><w>180</w><h>70</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=statInstance</panel_attributes><additional_attributes>10;40;160;40;160;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1980</x><y>550</y><w>220</w><h>100</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+r1=savedStatInstance</panel_attributes><additional_attributes>100;80;100;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>1610</x><y>420</y><w>790</w><h>190</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..n
+r1=powerStatTypes</panel_attributes><additional_attributes>10;10;10;60;770;60;770;170</additional_attributes></element><element><id>UMLClass</id><coordinates><x>930</x><y>1520</y><w>940</w><h>750</h></coordinates><panel_attributes>&lt;&lt;abstract&gt;&gt;
+Character
+--
+- SP : int
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1360</x><y>1270</y><w>210</w><h>100</h></coordinates><panel_attributes>StatData
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1460</x><y>740</y><w>60</w><h>550</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+r1=stats</panel_attributes><additional_attributes>10;10;10;530</additional_attributes></element><element><id>Relation</id><coordinates><x>1440</x><y>1360</y><w>80</w><h>180</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=statData</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1220</x><y>1290</y><w>120</w><h>80</h></coordinates><panel_attributes>PyshicalData
+--
+- lifespan : double
+- age : int
+- gender: String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1270</x><y>1360</y><w>100</w><h>180</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=pyshicalData</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>UMLClass</id><coordinates><x>920</x><y>1300</y><w>210</w><h>70</h></coordinates><panel_attributes>LoreData
+--
+- past: String
+- pyshicalDescription : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>980</x><y>1360</y><w>80</w><h>180</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=loreData</panel_attributes><additional_attributes>10;10;10;160</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1020</x><y>960</y><w>260</w><h>150</h></coordinates><panel_attributes>FunctionalParameter
+--
++ getActualValue() : double
++ getMaxValue() : double
++ getType() : FunctionalParameterType
++ getDescription() : String
++ modifyValue(double) : void
++ addModifier(FPModifier) : void
++ removeModifier(FPModifier) : void
++ getModifiers() : FPModifier[*]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1270</x><y>1020</y><w>170</w><h>270</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+r1=functionalParameters</panel_attributes><additional_attributes>10;20;130;20;130;250</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1040</x><y>760</y><w>210</w><h>90</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+FunctionalParameterType
+--
++ HEALTH
++ STAMINA
++ QI</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>580</x><y>980</y><w>260</w><h>90</h></coordinates><panel_attributes>&lt;&lt;interface&gt;&gt;
+FunctionalParameterModifier
+--
++ getDescription() : String
++ apply(FunctionalParameter) : boolean
++ remove(FunctionalParameter) : boolean
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1140</x><y>840</y><w>50</w><h>140</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=type
+r2=*</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>Relation</id><coordinates><x>830</x><y>1010</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=modifiers
+r2=*</panel_attributes><additional_attributes>10;20;190;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>440</x><y>1520</y><w>270</w><h>100</h></coordinates><panel_attributes>DiseaseInjury
+--
+- cause : String
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>700</x><y>1580</y><w>250</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=*
+m2=1
+diseasesInjuries</panel_attributes><additional_attributes>10;20;230;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>110</x><y>1450</y><w>140</w><h>100</h></coordinates><panel_attributes>DiseaseInjuryType
+--
+- name : String
+- description : String
+- cause : String
+- cure : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>240</x><y>1510</y><w>220</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+diseaseInjuryType
+m1=1
+m2=*</panel_attributes><additional_attributes>10;20;200;20</additional_attributes></element><element><id>Relation</id><coordinates><x>190</x><y>1580</y><w>270</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+actualLevel
+m1=1
+m2=1</panel_attributes><additional_attributes>10;20;250;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>1590</y><w>200</w><h>120</h></coordinates><panel_attributes>AfflictedLevel
+--
+- onRolEffect : String
+--
+- statModifiers : StatModifier[*]</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>10</x><y>1480</y><w>120</w><h>130</h></coordinates><panel_attributes>lt=&lt;-
+m1=*
+levels
+m2=1</panel_attributes><additional_attributes>10;110;10;10;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2020</x><y>1030</y><w>210</w><h>90</h></coordinates><panel_attributes>Entity
+--
+- id : int
+_- lastID : int_
+--
+/+ getEntityType() : EntityType/</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2020</x><y>920</y><w>210</w><h>90</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+EntityType
+--
++ CHARACTER
++ NPC
++ ITEM</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1800</x><y>1060</y><w>240</w><h>480</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>220;10;10;10;10;460</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2540</x><y>1310</y><w>210</w><h>260</h></coordinates><panel_attributes>Item
+--
+- name : String
+- description : String
+- capacityRequired : double
+- isRedimensionable : boolean //Si se puede meter en anillos</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2940</x><y>1190</y><w>220</w><h>170</h></coordinates><panel_attributes>EquipableComponent
+--
+- pyshicalArmorPoints : int
+- spiritualArmorPoints: int
+- criticalPyshicalDefenseModifier : int
+- criticalSpiritualDefenseModifier : int
+
+- baseDamage : double
+- criticalDamageModifier : double
+
+- equippableEffect : String</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2740</x><y>1300</y><w>220</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..1
+r1=equipableData</panel_attributes><additional_attributes>200;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2940</x><y>1380</y><w>220</w><h>100</h></coordinates><panel_attributes>ConsumableComponent
+--
+- numberUsesLeft : int
+- numberUsesMax : int
+- isRefillable : boolean
+- efect : String
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2940</x><y>1020</y><w>220</w><h>110</h></coordinates><panel_attributes>DurabilityComponent
+--
+- durability : double
+- maxDurability : double
+- isRepairable : boolean
+- canBeRepairedIfBroken : boolean
+- repairMethod : String
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2740</x><y>1400</y><w>220</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..1
+r1=consumableData</panel_attributes><additional_attributes>200;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>3020</x><y>1120</y><w>110</w><h>90</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..1
+r1=durabilityData</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>2220</x><y>1060</y><w>360</w><h>270</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;340;10;340;250</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2120</x><y>1710</y><w>210</w><h>260</h></coordinates><panel_attributes>Inventory
+--
+- baseCapacity : double
+- actualCapacity : double
+--
++ addItem(Item) : boolean
++ removeItem(Item) : boolean
++ emptyInventory(Item) : boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2280</x><y>1450</y><w>280</w><h>280</h></coordinates><panel_attributes>lt=&lt;-&gt;
+m1=0..1
+r1=inventoryData
+r2=itemInventory
+m2=0..1</panel_attributes><additional_attributes>10;260;10;20;260;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1860</x><y>1770</y><w>280</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=inventoryData</panel_attributes><additional_attributes>260;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>2320</x><y>1560</y><w>330</w><h>230</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..*
+r1=itemsStored</panel_attributes><additional_attributes>240;10;240;210;10;210</additional_attributes></element><element><id>UMLClass</id><coordinates><x>3320</x><y>1090</y><w>220</w><h>650</h></coordinates><panel_attributes>&lt;&lt;enum&gt;&gt;
+EquippableZone
+--
++ HEAD_TOP
++ HEAD_MIDDLE
++ HEAD_BOTTOM
+
++ NECK
+
++ SHOULDER_LEFT
++ SHOULDER_RIGHT
+
++ ARM_LEFT_SUPERIOR
++ ARM_LEFT_INFERIOR
++ ARM_LEFT_HAND
++ ARM_LEFT_FINGER
+
++ ARM_RIGHT_SUPERIOR
++ ARM_RIGHT_INFERIOR
++ ARM_RIGHT_HAND
++ ARM_RIGHT_FINGER
+
++ BACK_TOP
++ BACK_MIDDLE
++ BACK_BOTTOM
+
++ CHEST_TOP
++ CHEST_MIDDLE
++ CHEST_BOTTOM
+
++ HIP_FRONT
++ HIP_BACK
+
++ LEG_LEFT_TOP
++ LEG_LEFT_BOTTOM
++ LEG_LEFT_FOOT
+
++ LEG_RIGHT_TOP
++ LEG_RIGHT_BOTTOM
++ LEG_RIGHT_FOOT
+
++ TAIL_TOP
++ TAIL_BOTTOM</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>3150</x><y>1210</y><w>190</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..*
+zonesNeededToEquip</panel_attributes><additional_attributes>170;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2450</x><y>1930</y><w>210</w><h>190</h></coordinates><panel_attributes>Equipment
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>2730</x><y>1660</y><w>210</w><h>190</h></coordinates><panel_attributes>Slot
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2930</x><y>1680</y><w>410</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=zone</panel_attributes><additional_attributes>390;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>2160</x><y>1370</y><w>400</w><h>360</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=containedIn</panel_attributes><additional_attributes>10;340;10;10;380;10</additional_attributes></element><element><id>Relation</id><coordinates><x>2650</x><y>1840</y><w>180</w><h>120</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..n
+slots</panel_attributes><additional_attributes>140;10;140;100;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>1860</x><y>2010</y><w>610</w><h>50</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+equipment</panel_attributes><additional_attributes>590;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>2180</x><y>670</y><w>130</w><h>90</h></coordinates><panel_attributes>lt=&lt;-&gt;
+m1=0..1
+r1=previousStep
+r2=nextStep
+m2=0..1</panel_attributes><additional_attributes>110;20;10;20;10;60;110;60</additional_attributes></element></diagram>
