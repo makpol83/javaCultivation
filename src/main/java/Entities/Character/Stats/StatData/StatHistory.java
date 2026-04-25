@@ -1,9 +1,9 @@
-package Entities.Character.Stats.StatData.StatData;
+package Entities.Character.Stats.StatData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Character.Stats.Stat;
+import Entities.Character.Stats.Stat;
 
 public class StatHistory {
     private List<StatPowerStepFinalInstance> statInstances = new ArrayList<>();
@@ -13,6 +13,9 @@ public class StatHistory {
     }
 
     public boolean addStat(Stat stat){
+        if(stat == null)
+            throw new NullPointerException("Stat cannot be null.");
+
         return this.statInstances.add(new StatPowerStepFinalInstance(stat));
     }
 

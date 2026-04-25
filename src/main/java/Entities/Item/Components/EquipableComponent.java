@@ -19,7 +19,28 @@ public class EquipableComponent implements Cloneable {
     
     public EquipableComponent(int pyshicalArmorPoints, int spiritualArmorPoints, int criticalPyshicalDefenseModifier,
             int criticalSpiritualDefenseModifier, double baseDamage, double criticalDamageModifier,
-            String equippableEffect, DurabilityComponent durabilityData, List<EquippableZone> zonesNeededToEquip) {
+            String equippableEffect, DurabilityComponent durabilityData, List<EquippableZone> zonesNeededToEquipAdd){
+
+        if(criticalPyshicalDefenseModifier < 0) 
+            throw new IllegalArgumentException("Critical pyshical defense modifier cannot go below 0.");
+
+        if(criticalSpiritualDefenseModifier < 0) 
+            throw new IllegalArgumentException("Critical spiritual defense modifier cannot go below 0.");
+
+        if(criticalDamageModifier < 0) 
+            throw new IllegalArgumentException("Critical damage modifier cannot go below 0.");
+
+        if(zonesNeededToEquipAdd.size() == 0)
+            throw new IllegalArgumentException("Must there be at least 1 zone to equip if equippable.");
+
+        if(durabilityData == null)
+            throw new NullPointerException("Durability data cannot be null.");
+
+        if(equippableEffect == null)
+            throw new NullPointerException("Equippable data cannot be null.");
+
+        //Base damage can be negative to heal
+
         this.pyshicalArmorPoints = pyshicalArmorPoints;
         this.spiritualArmorPoints = spiritualArmorPoints;
         this.criticalPyshicalDefenseModifier = criticalPyshicalDefenseModifier;
@@ -28,7 +49,7 @@ public class EquipableComponent implements Cloneable {
         this.criticalDamageModifier = criticalDamageModifier;
         this.equippableEffect = equippableEffect;
         this.durabilityData = durabilityData;
-        this.zonesNeededToEquip.addAll(zonesNeededToEquip);
+        this.zonesNeededToEquip.addAll(zonesNeededToEquipAdd);
     }
     public int getPyshicalArmorPoints() {
         return pyshicalArmorPoints;
@@ -49,6 +70,9 @@ public class EquipableComponent implements Cloneable {
         return criticalDamageModifier;
     }
     public String getEquippableEffect() {
+        if(equippableEffect == null)
+            return new String("Sin efecto.");
+
         return equippableEffect;
     }
     public DurabilityComponent getDurabilityData() {
@@ -60,6 +84,7 @@ public class EquipableComponent implements Cloneable {
 
     @Override
     public EquipableComponent clone(){
-        return new EquipableComponent(pyshicalArmorPoints, spiritualArmorPoints, criticalPyshicalDefenseModifier, criticalSpiritualDefenseModifier, baseDamage, criticalDamageModifier, equippableEffect, durabilityData, zonesNeededToEquip)
+        DurabilityComponent durabData = new DurabilityComponent(durabilityData.getActualDurability(), durabilityData.getMaxDurability(), durabilityData.isRepairable(), durabilityData.canBeRepairedIfBroken(), new String(durabilityData.getRepairMethod()));
+        return new EquipableComponent(pyshicalArmorPoints, spiritualArmorPoints, criticalPyshicalDefenseModifier, criticalSpiritualDefenseModifier, baseDamage, criticalDamageModifier, new String(equippableEffect), durabData, zonesNeededToEquip);
     }
 }

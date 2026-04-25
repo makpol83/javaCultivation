@@ -9,4 +9,5 @@ public abstract class Entity {
     }
 
     public abstract EntityType getEntityType();
+    public int getId(){ return this.id; }
 }

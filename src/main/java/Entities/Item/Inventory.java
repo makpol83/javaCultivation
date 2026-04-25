@@ -4,15 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Entities.Interfaces.Container;
+import Exceptions.Item.ContainerFullException;
+import Exceptions.Item.ItemAlreadyContainedException;
 
-public class Inventory extends ArrayList<Item> implements Container{
+public class Inventory implements Container{
     private double baseCapacity;
+    private List<Item> itemsStored = new ArrayList<>();
 
     private Item itemAssociated;
 
-    public Inventory(double baseCapacity, List<Item> itemsStored, Item itemAssociated) {
+    public Inventory(double baseCapacity, List<Item> itemsStoredadd, Item itemAssociated){
+        if(baseCapacity <= 0)
+            throw new IllegalArgumentException("Base capacity cannot be 0 or negative");
+
         this.baseCapacity = baseCapacity;
-        this.addAll(itemsStored);
+        if(itemsStoredadd != null)
+            this.itemsStored.addAll(itemsStored);
         this.itemAssociated = itemAssociated;
     }
 
@@ -21,7 +28,7 @@ public class Inventory extends ArrayList<Item> implements Container{
     }
 
     public List<Item> getItemsStored() {
-        return List.copyOf(this);
+        return List.copyOf(this.itemsStored);
     }
 
     public Item getitemAssociated() {
@@ -30,41 +37,42 @@ public class Inventory extends ArrayList<Item> implements Container{
 
     public double getActualCapacity(){
         double actualCapacity = 0;
-        for(Item item : this){
+        for(Item item : this.itemsStored){
             actualCapacity += item.getCapacityRequired();
         }
 
         return baseCapacity - actualCapacity;
     }
 
-    @Override
-    public boolean add(Item item){
+    public void add(Item item) throws ContainerFullException, ItemAlreadyContainedException{
         if(item.getCapacityRequired() > getActualCapacity())
-            return false;
+            throw new ContainerFullException(this);
 
-        if(this.contains(item) == true)
-            return false;
+        if(this.itemsStored.contains(item) == true)
+            throw new ItemAlreadyContainedException(this, item);
         
-        this.remove(item);
+        this.itemsStored.remove(item);
 
         item.setContainedIn(this);
-        return super.add(item);
+        this.itemsStored.add(item);
+    }
+
+    public void remove(Item item){
+        if(this.itemsStored.contains(item) == false)
+            return;
+
+        item.setContainedIn(null);
+        this.itemsStored.remove(item);
     }
 
     @Override
-    public boolean remove(Object item){
-        if(this.contains(item) == false)
-            return false;
-
-        //We only store Items or items that extend from it
-        ((Item) item).setContainedIn(null);
-        return super.remove(item);
+    public boolean contains(Item item){
+        return this.itemsStored.contains(item);
     }
-
     
     public Inventory clone(Item item){
         List<Item> copiedItems = new ArrayList<>();
-        for(Item i : this){
+        for(Item i : this.itemsStored){
             copiedItems.add(i.clone(null));
         }
 

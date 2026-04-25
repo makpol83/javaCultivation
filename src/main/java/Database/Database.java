@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import Entities.Character.Cultivation.CultivationRange;
-import Entities.Character.Cultivation.CultivationRealm;
 import Entities.Character.Stats.StatData.StatQuality;
 import Entities.Character.Stats.StatData.StatType;
 

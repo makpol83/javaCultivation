@@ -30,11 +30,24 @@ public class Stat {
         boolean isVisible,
         boolean isPaused)
     {
+        if(baseMultiplier < 0)
+            throw new IllegalArgumentException("Base multiplier cannot be negative.");
+
+        if(value < 0)
+            throw new IllegalArgumentException("Value cannot be negative.");
+
+        if(quality == null)
+            throw new NullPointerException("Quality cannot be null.");
+
+        if(type == null)
+            throw new NullPointerException("Type cannot be null.");
+
         this.baseMultiplier = baseMultiplier;
         this.value = value;
         this.quality = quality;
         this.type = type;
-        this.modifiers = new ArrayList<>(modifiers);
+        if(modifiers != null)
+            this.modifiers = new ArrayList<>(modifiers);
 
         this.isVisible = isVisible;
         this.isPaused = isPaused;
@@ -48,6 +61,9 @@ public class Stat {
     public Collection<StatModifier> getModifiers(){ return List.copyOf(this.modifiers); }
     public boolean isVisible(){ return this.isVisible; }
     public boolean isPaused(){ return this.isPaused; }
+
+    public void setPaused(){ this.isPaused = true; }
+    public void setUnPaused(){ this.isPaused = false; }
 
     public boolean modifyStat(int value){
         if(this.isPaused == true)

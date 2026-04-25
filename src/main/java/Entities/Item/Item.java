@@ -5,6 +5,8 @@ import Entities.EntityType;
 import Entities.Interfaces.Container;
 import Entities.Item.Components.ConsumableComponent;
 import Entities.Item.Components.EquipableComponent;
+import Exceptions.Item.ContainerFullException;
+import Exceptions.Item.ItemAlreadyContainedException;
 
 public class Item extends Entity implements Cloneable{
 
@@ -21,8 +23,18 @@ public class Item extends Entity implements Cloneable{
 
     public Item(String name, String description, double capacityRequired, boolean isRedimensionable,
             EquipableComponent equipableData, ConsumableComponent consumableData, Inventory inventoryData,
-            Inventory containedIn) {
+            Inventory containedIn){
         super();
+
+        if(name == null)
+            throw new NullPointerException("Name cannot be null.");
+
+        if(description == null)
+            throw new NullPointerException("Description cannot be null.");
+
+        if(capacityRequired < 0)
+            throw new IllegalArgumentException("Capacity required must be >= 0.");
+
         this.name = name;
         this.description = description;
         this.capacityRequired = capacityRequired;
@@ -86,22 +98,29 @@ public class Item extends Entity implements Cloneable{
         return true;
     }
 
-    public boolean add(Item item){
-        if(hasInventory() == false)
-            return false;
+    public void add(Item item) throws IllegalStateException, ContainerFullException, ItemAlreadyContainedException{
+        if(item == null)
+            throw new NullPointerException("Item cannot be null");
 
-        return this.inventoryData.add(item);
+        if(hasInventory() == false)
+            throw new IllegalStateException("Cannot add an item to the inventory if item does not have inventory.");
+
+        this.inventoryData.add(item);
     }
 
-    public boolean remove(Item item){
-        if(hasInventory() == false)
-            return false;
+    public void remove(Item item) throws IllegalStateException{
+        if(item == null)
+            throw new NullPointerException("Item cannot be null.");
 
-        return this.inventoryData.remove(item);
+        if(hasInventory() == false)
+            throw new IllegalStateException("Cannot remove an item from the inventory if item does not have inventory.");
+
+        this.inventoryData.remove(item);
     }
 
     public void setContainedIn(Container newContainer){
-        this.containedIn.remove(this);
+        if(this.containedIn != null)
+            this.containedIn.remove(this);
         this.containedIn = newContainer;
     }
 
@@ -109,7 +128,6 @@ public class Item extends Entity implements Cloneable{
     @Override
     public EntityType getEntityType(){ return EntityType.ITEM; }
 
-    
     public Item clone(Inventory containedIn){
         EquipableComponent copyEqComp;
         ConsumableComponent copyCoComp;
@@ -131,7 +149,6 @@ public class Item extends Entity implements Cloneable{
         } else {
             copyInvData = this.inventoryData.clone(null);
         }
-        
 
         return new Item(name, description, capacityRequired, isRedimensionable, copyEqComp, copyCoComp, copyInvData, containedIn);
     }

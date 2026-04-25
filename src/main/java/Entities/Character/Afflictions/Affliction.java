@@ -5,6 +5,12 @@ public class Affliction {
     private AfflictionLevel level;
 
     public Affliction(AfflictionType type, AfflictionLevel level) {
+        if(type == null)
+            throw new NullPointerException("Type cannot be null.");
+
+        if(level == null)
+            throw new NullPointerException("Level cannot be null.");
+
         this.type = type;
         this.level = level;
     }
@@ -17,9 +23,9 @@ public class Affliction {
     public AfflictionLevel getLevel() {
         return level;
     }
-    public void setLevel(AfflictionLevel level) {
+    public void setLevel(AfflictionLevel level) throws IllegalStateException{
         if(this.type.getLevels().contains(level) == false)
-            return;
+            throw new IllegalStateException("Cannot add a level to an affliction that doesn't match type.");
 
         this.level = level;
     }

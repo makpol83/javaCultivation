@@ -8,6 +8,9 @@ public class Slot {
     private Item item;
 
     public Slot(EquippableZone zone, Item item){
+        if(zone == null)
+            throw new NullPointerException("Zone of slot cannot be null");
+
         this.zone = zone;
         this.item = item;
     }
@@ -21,23 +24,12 @@ public class Slot {
 
     public EquippableZone getZone(){ return this.zone; }
 
-    public boolean equip(Item item){
-        if(item.isEquippable() == false)
-            return false;
-
-        if(item.getEquipableData().getZonesNeededToEquip().contains(zone) == false)
-            return false;
-
+    public void equip(Item item){
         this.item = item;
-        return true;
     }
 
-    public boolean unequip(){
-        if(this.item == null)
-            return false;
-
+    public void unequip(){
         this.item = null;
-        return true;
     }
 
     public Item getEquippedItem(){

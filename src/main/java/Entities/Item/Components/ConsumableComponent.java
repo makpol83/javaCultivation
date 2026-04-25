@@ -6,7 +6,20 @@ public class ConsumableComponent implements Cloneable{
     private boolean isRefillable;
     private String effect;
 
-    public ConsumableComponent(int availableUses, int maxUses, boolean isRefillable, String effect) {
+    public ConsumableComponent(int availableUses, int maxUses, boolean isRefillable, String effect)
+    {
+        if(this.availableUses < 0)
+            throw new IllegalArgumentException("Uses cannot be below 0.");
+
+        if(this.availableUses > maxUses)
+            throw new IllegalArgumentException("Uses cannot be above maxUses.");
+
+        if(this.maxUses < 0)
+            throw new IllegalArgumentException("Max uses cannot be below 0.");
+
+        if(effect == null || effect.length() == 0)
+            throw new IllegalArgumentException("Effect cannot be empty.");
+
         this.availableUses = availableUses;
         this.maxUses = maxUses;
         this.isRefillable = isRefillable;
@@ -26,23 +39,27 @@ public class ConsumableComponent implements Cloneable{
         return effect;
     }
 
-    public boolean use(){
+    public void use() throws 
+        IllegalStateException
+    {
         if(this.availableUses == 0)
-            return false;
+            throw new IllegalStateException("Can't use an item without available uses");
 
         availableUses--;
-        return true;
     }
 
-    public boolean refill(int numberUsesToRefill){
+    public void refill(int numberUsesToRefill) throws IllegalStateException
+    {
+        if(numberUsesToRefill <= 0)
+            throw new IllegalArgumentException("Number of uses to refill cannot be below 0");
+
         if(this.isRefillable == false)
-            return false;
+            throw new IllegalStateException("Cannot refill a non-refillable object");
 
         if(this.availableUses + numberUsesToRefill > this.maxUses)
             numberUsesToRefill = this.maxUses - this.availableUses;
     
         availableUses += numberUsesToRefill;
-        return true;
     }
 
     public void setEffect(String newEffect){

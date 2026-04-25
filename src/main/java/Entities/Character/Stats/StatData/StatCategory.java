@@ -1,4 +1,4 @@
-package Entities.Character.Stats.StatData.StatData;
+package Entities.Character.Stats.StatData;
 
 public enum StatCategory implements StatModifiable{
     PYSHICAL,
