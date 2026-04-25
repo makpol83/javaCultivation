@@ -7,4 +7,6 @@ public abstract class Entity {
     public Entity(){
         this.id = 0;
     }
+
+    public abstract EntityType getEntityType();
 }
