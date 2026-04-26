@@ -1,5 +1,8 @@
 package Entities.Item;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import Entities.Entity;
 import Entities.EntityType;
 import Entities.Interfaces.Container;
@@ -8,17 +11,36 @@ import Entities.Item.Components.EquipableComponent;
 import Exceptions.Item.ContainerFullException;
 import Exceptions.Item.ItemAlreadyContainedException;
 
+@DatabaseTable(tableName = "item_instances")
 public class Item extends Entity implements Cloneable{
 
+    @DatabaseField
     private String name;
+
+    @DatabaseField
     private String description;
+
+    @DatabaseField
     private double capacityRequired;
+
+    @DatabaseField
     private boolean isRedimensionable;  //True if can be stored in the inventory of an object
     
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     private EquipableComponent equipableData;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     private ConsumableComponent consumableData;
 
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     private Inventory inventoryData; //If it has an inventory
+
+    //FIX
+    private long containerId;
+
+    private String containerType;
+
+
     private Container containedIn; //Null means it is an Item type to clone
 
     public Item(String name, String description, double capacityRequired, boolean isRedimensionable,

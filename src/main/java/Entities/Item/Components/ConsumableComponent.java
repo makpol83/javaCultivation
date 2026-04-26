@@ -1,9 +1,24 @@
 package Entities.Item.Components;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "consumable_components")
 public class ConsumableComponent implements Cloneable{
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
     private int availableUses;
+
+    @DatabaseField
     private int maxUses;
+
+    @DatabaseField
     private boolean isRefillable;
+
+    @DatabaseField
     private String effect;
 
     public ConsumableComponent(int availableUses, int maxUses, boolean isRefillable, String effect)

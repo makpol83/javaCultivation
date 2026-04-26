@@ -1,13 +1,31 @@
 package Entities.Item.Components;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "durability_components")
 public class DurabilityComponent implements Cloneable{
+    
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
     private double actualDurability;
+
+    @DatabaseField
     private double maxDurability;
     
+    @DatabaseField
     private boolean isRepairable;
+
+    @DatabaseField
     private boolean canBeRepairedIfBroken;
 
+    @DatabaseField
     private String repairMethod;
+
+    //Used by ORMLite
+    protected DurabilityComponent(){}
 
     public DurabilityComponent(double actualDurability, double maxDurability, boolean isRepairable, boolean canBeRepairedIfBroken, String repairMethod){
         if(actualDurability < 0)
