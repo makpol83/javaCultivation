@@ -48,7 +48,7 @@ public class StatPowerStepFinalInstance {
 
         this.statInstance = newStatToSave;
         this.stepAssociated = stepAssociated;
-        this.statHistory = statHistory;
+        this.statHistory = history;
     }
 
     public PowerStepType getAssociatedPowerStep(){ return this.stepAssociated; }

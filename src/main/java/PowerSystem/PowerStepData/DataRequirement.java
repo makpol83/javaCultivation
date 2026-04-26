@@ -1,13 +1,10 @@
 package PowerSystem.PowerStepData;
 
-import javax.xml.crypto.Data;
-
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import Entities.Character.Characterr;
-import Entities.Character.Stats.Stat;
 import Entities.Character.Stats.StatData.StatType;
 
 @DatabaseTable(tableName = "data_requirements")

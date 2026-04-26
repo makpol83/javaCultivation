@@ -16,7 +16,6 @@ import Entities.Character.Data.PhysicalData;
 import Entities.Character.Equipment.Equipment;
 import Entities.Character.Equipment.Slot;
 import Entities.Character.Stats.StatData.StatData;
-import Entities.Item.ItemInstance;
 import Entities.Item.Components.EquippableZone;
 import PowerSystem.PowerStepType;
 import PowerSystem.PowerSystem;
