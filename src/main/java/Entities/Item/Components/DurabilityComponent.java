@@ -44,7 +44,7 @@ public class DurabilityComponent implements Cloneable{
         this.maxDurability = maxDurability;
         this.isRepairable = isRepairable;
         this.canBeRepairedIfBroken = canBeRepairedIfBroken;
-        this.repairMethod = repairMethod;
+        this.repairMethod = new String(repairMethod);
     }
 
     public double getActualDurability(){ return this.actualDurability; }
@@ -62,7 +62,7 @@ public class DurabilityComponent implements Cloneable{
     }
 
     public String getRepairMethod() {
-        return repairMethod;
+        return new String(repairMethod);
     }
 
     public void damage(double percentage){

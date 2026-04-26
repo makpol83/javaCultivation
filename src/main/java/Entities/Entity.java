@@ -1,20 +1,14 @@
 package Entities;
 
-public abstract class Entity {
-    private final long id;
-    private static long lastId = 0;
+import com.j256.ormlite.field.DatabaseField;
 
-    public Entity(){
-        this.id = Entity.lastId++;
-    }
+public abstract class Entity {
+    @DatabaseField(generatedId = true)
+    protected long id;
+
+    public Entity(){}
 
     public abstract EntityType getEntityType();
     public long getId(){ return this.id; }
 
-    public static void setLastId(int lastId){
-        if(Entity.lastId < 0)
-            throw new IllegalArgumentException("Last id cannot be null, must be > 0.");
-
-        Entity.lastId = lastId;
-    }
 }

@@ -7,11 +7,11 @@ public class AfflictionLevel {
         if(onRolEffect == null)
             throw new NullPointerException("On rol effect can't be null.");
 
-        this.onRolEffect = onRolEffect;
+        this.onRolEffect = new String(onRolEffect);
     }
 
     public String getOnRolEffect() {
-        return onRolEffect;
+        return new String(onRolEffect);
     }
 
     public void setOnRolEffect(String onRolEffect) {

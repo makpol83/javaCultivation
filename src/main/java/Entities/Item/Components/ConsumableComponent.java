@@ -38,7 +38,7 @@ public class ConsumableComponent implements Cloneable{
         this.availableUses = availableUses;
         this.maxUses = maxUses;
         this.isRefillable = isRefillable;
-        this.effect = effect;
+        this.effect = new String(effect);
     }
 
     public int getAvailableUses() {
@@ -51,7 +51,7 @@ public class ConsumableComponent implements Cloneable{
         return isRefillable;
     }
     public String getEffect() {
-        return effect;
+        return new String(effect);
     }
 
     public void use() throws 
@@ -78,7 +78,7 @@ public class ConsumableComponent implements Cloneable{
     }
 
     public void setEffect(String newEffect){
-        this.effect = newEffect;
+        this.effect = new String(newEffect);
     }
 
     @Override

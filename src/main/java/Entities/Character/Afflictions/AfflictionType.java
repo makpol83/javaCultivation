@@ -27,45 +27,45 @@ public class AfflictionType {
         if(levels.size() == 0)
             throw new IllegalArgumentException("Must have at least one level");
 
-        this.name = name;
-        this.description = description;
-        this.cause = cause;
-        this.cure = cure;
+        this.name = new String(name);
+        this.description = new String(description);
+        this.cause = new String(cause);
+        this.cure = new String(cure);
         this.levels.addAll(levels);
     }
 
     public String getName() {
-        return name;
+        return new String(name);
     }
     public void setName(String name) {
         if(name == null)
             throw new NullPointerException("Name can't be null.");
-        this.name = name;
+        this.name = new String(name);
     }
     public String getDescription() {
-        return description;
+        return new String(description);
     }
     public void setDescription(String description) {
         if(description == null)
             throw new NullPointerException("Description can't be null.");
 
-        this.description = description;
+        this.description = new String(description);
     }
     public String getCause() {
-        return cause;
+        return new String(cause);
     }
     public void setCause(String cause) {
         if(cause == null)
             throw new NullPointerException("Cause can't be null.");
-        this.cause = cause;
+        this.cause = new String(cause);
     }
     public String getCure() {
-        return cure;
+        return new String(cure);
     }
     public void setCure(String cure) {
         if(cure == null)
             throw new NullPointerException("Cure can't be null.");
-        this.cure = cure;
+        this.cure = new String(cure);
     }
 
     public List<AfflictionLevel> getLevels(){

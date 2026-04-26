@@ -5,14 +5,11 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import Entities.Entity;
 import Entities.EntityType;
-import Entities.Interfaces.Container;
 import Entities.Item.Components.ConsumableComponent;
 import Entities.Item.Components.EquipableComponent;
-import Exceptions.Item.ContainerFullException;
-import Exceptions.Item.ItemAlreadyContainedException;
 
 @DatabaseTable(tableName = "item_instances")
-public class Item extends Entity implements Cloneable{
+public class Item extends Entity {
 
     @DatabaseField
     private String name;
@@ -35,14 +32,6 @@ public class Item extends Entity implements Cloneable{
     @DatabaseField(foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     private Inventory inventoryData; //If it has an inventory
 
-    //FIX
-    private long containerId;
-
-    private String containerType;
-
-
-    private Container containedIn; //Null means it is an Item type to clone
-
     public Item(String name, String description, double capacityRequired, boolean isRedimensionable,
             EquipableComponent equipableData, ConsumableComponent consumableData, Inventory inventoryData,
             Inventory containedIn){
@@ -57,22 +46,21 @@ public class Item extends Entity implements Cloneable{
         if(capacityRequired < 0)
             throw new IllegalArgumentException("Capacity required must be >= 0.");
 
-        this.name = name;
-        this.description = description;
+        this.name = new String(name);
+        this.description = new String(description);
         this.capacityRequired = capacityRequired;
         this.isRedimensionable = isRedimensionable;
         this.equipableData = equipableData;
         this.consumableData = consumableData;
         this.inventoryData = inventoryData;
-        this.containedIn = containedIn;
     }
 
     public String getName() {
-        return name;
+        return new String(name);
     }
 
     public String getDescription() {
-        return description;
+        return new String(description);
     }
 
     public double getCapacityRequired() {
@@ -89,10 +77,6 @@ public class Item extends Entity implements Cloneable{
 
     public ConsumableComponent getConsumableData() {
         return consumableData;
-    }
-
-    public Container getContainedInInventory(){
-        return containedIn;
     }
 
     public Inventory getInventoryOfItem(){
@@ -120,58 +104,6 @@ public class Item extends Entity implements Cloneable{
         return true;
     }
 
-    public void add(Item item) throws IllegalStateException, ContainerFullException, ItemAlreadyContainedException{
-        if(item == null)
-            throw new NullPointerException("Item cannot be null");
-
-        if(hasInventory() == false)
-            throw new IllegalStateException("Cannot add an item to the inventory if item does not have inventory.");
-
-        this.inventoryData.add(item);
-    }
-
-    public void remove(Item item) throws IllegalStateException{
-        if(item == null)
-            throw new NullPointerException("Item cannot be null.");
-
-        if(hasInventory() == false)
-            throw new IllegalStateException("Cannot remove an item from the inventory if item does not have inventory.");
-
-        this.inventoryData.remove(item);
-    }
-
-    public void setContainedIn(Container newContainer){
-        if(this.containedIn != null)
-            this.containedIn.remove(this);
-        this.containedIn = newContainer;
-    }
-
-
     @Override
     public EntityType getEntityType(){ return EntityType.ITEM; }
-
-    public Item clone(Inventory containedIn){
-        EquipableComponent copyEqComp;
-        ConsumableComponent copyCoComp;
-        Inventory copyInvData;
-        if(this.equipableData == null){
-            copyEqComp = null;
-        } else {
-            copyEqComp = this.equipableData.clone();
-        }
-
-        if(this.consumableData == null){
-            copyCoComp = null;
-        } else {
-            copyCoComp = this.consumableData.clone();
-        }
-
-        if(this.inventoryData == null){
-            copyInvData = null;
-        } else {
-            copyInvData = this.inventoryData.clone(null);
-        }
-
-        return new Item(name, description, capacityRequired, isRedimensionable, copyEqComp, copyCoComp, copyInvData, containedIn);
-    }
 }

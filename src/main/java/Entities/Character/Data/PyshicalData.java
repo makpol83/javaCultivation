@@ -20,7 +20,7 @@ public class PyshicalData {
 
         this.lifespan = lifespan;
         this.age = age;
-        this.gender = gender;
+        this.gender = new String(gender);
     }
 
     public double getLifespan() {
@@ -30,7 +30,7 @@ public class PyshicalData {
         return age;
     }
     public String getGender() {
-        return gender;
+        return new String(gender);
     }
 
     public void setLifespan(double lifespanToSet) {

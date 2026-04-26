@@ -80,7 +80,7 @@ public class EquipableComponent implements Cloneable {
         this.criticalSpiritualDefenseModifier = criticalSpiritualDefenseModifier;
         this.baseDamage = baseDamage;
         this.criticalDamageModifier = criticalDamageModifier;
-        this.equippableEffect = equippableEffect;
+        this.equippableEffect = new String(equippableEffect);
         this.durabilityData = durabilityData;
         this.zonesJson = gson.toJson(zonesNeededToEquipAdd);
     }
@@ -106,7 +106,7 @@ public class EquipableComponent implements Cloneable {
         if(equippableEffect == null)
             return new String("Sin efecto.");
 
-        return equippableEffect;
+        return new String(equippableEffect);
     }
     public DurabilityComponent getDurabilityData() {
         return durabilityData;

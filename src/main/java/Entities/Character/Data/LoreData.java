@@ -11,25 +11,25 @@ public class LoreData {
         if(pyshicalDescription == null)
             throw new NullPointerException("Pyshical description can't be null.");
 
-        this.past = past;
-        this.pyshicalDescription = pyshicalDescription;
+        this.past = new String(past);
+        this.pyshicalDescription = new String(pyshicalDescription);
     }
 
     public String getPast() {
-        return past;
+        return new String(past);
     }
     public String getPyshicalDescription() {
-        return pyshicalDescription;
+        return new String(pyshicalDescription);
     }
 
     public void setPast(String past) {
         if(past == null)
             throw new NullPointerException("Past can't be null.");
-        this.past = past;
+        this.past = new String(past);
     }
     public void setPyshicalDescription(String pyshicalDescription) {
         if(pyshicalDescription == null)
             throw new NullPointerException("Pyshical description can't be null.");
-        this.pyshicalDescription = pyshicalDescription;
+        this.pyshicalDescription = new String(pyshicalDescription);
     }
 }

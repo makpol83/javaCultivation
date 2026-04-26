@@ -8,12 +8,14 @@ import Exceptions.Item.ContainerFullException;
 import Exceptions.Item.ItemAlreadyContainedException;
 
 public class Inventory implements Container{
+
     private double baseCapacity;
-    private List<Item> itemsStored = new ArrayList<>();
 
-    private Item itemAssociated;
+    private List<ItemInstance> itemsStored = new ArrayList<>();
 
-    public Inventory(double baseCapacity, List<Item> itemsStoredadd, Item itemAssociated){
+    private ItemInstance itemAssociated;
+
+    public Inventory(double baseCapacity, List<ItemInstance> itemsStoredadd, ItemInstance itemAssociated){
         if(baseCapacity <= 0)
             throw new IllegalArgumentException("Base capacity cannot be 0 or negative");
 
@@ -27,55 +29,42 @@ public class Inventory implements Container{
         return baseCapacity;
     }
 
-    public List<Item> getItemsStored() {
+    public List<ItemInstance> getItemsStored() {
         return List.copyOf(this.itemsStored);
     }
 
-    public Item getitemAssociated() {
+    public ItemInstance getitemAssociated() {
         return itemAssociated;
     }
 
     public double getActualCapacity(){
         double actualCapacity = 0;
-        for(Item item : this.itemsStored){
+        for(ItemInstance item : this.itemsStored){
             actualCapacity += item.getCapacityRequired();
         }
 
         return baseCapacity - actualCapacity;
     }
 
-    public void add(Item item) throws ContainerFullException, ItemAlreadyContainedException{
+    public void add(ItemInstance item) throws ContainerFullException, ItemAlreadyContainedException{
         if(item.getCapacityRequired() > getActualCapacity())
             throw new ContainerFullException(this);
 
         if(this.itemsStored.contains(item) == true)
             throw new ItemAlreadyContainedException(this, item);
         
-        this.itemsStored.remove(item);
-
-        item.setContainedIn(this);
         this.itemsStored.add(item);
     }
 
-    public void remove(Item item){
+    public void remove(ItemInstance item){
         if(this.itemsStored.contains(item) == false)
             return;
 
-        item.setContainedIn(null);
         this.itemsStored.remove(item);
     }
 
     @Override
-    public boolean contains(Item item){
+    public boolean contains(ItemInstance item){
         return this.itemsStored.contains(item);
-    }
-    
-    public Inventory clone(Item item){
-        List<Item> copiedItems = new ArrayList<>();
-        for(Item i : this.itemsStored){
-            copiedItems.add(i.clone(null));
-        }
-
-        return new Inventory(baseCapacity, copiedItems, itemAssociated);
     }
 }
