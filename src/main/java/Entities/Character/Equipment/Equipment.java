@@ -4,18 +4,40 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import Entities.Interfaces.Container;
-import Entities.Item.Item;
+import Entities.Item.ItemInstance;
 import Entities.Item.Components.EquippableZone;
 import Exceptions.Item.ContainerFullException;
 import Exceptions.Item.ItemAlreadyContainedException;
 
+@DatabaseTable(tableName = "equipments")
 public class Equipment implements Container{
-    private List<Item> equippedItems = new ArrayList<>();
-    private List<Slot> slots = new ArrayList<>();
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @ForeignCollectionField(eager = true)
+    private Collection<Slot> slots = new ArrayList<>();
+
+    public Equipment(){}
 
     public Equipment(Collection<Slot> slots){
         this.slots.addAll(slots);
+    }
+
+    public Collection<ItemInstance> getEquippedItems(){
+        Collection<ItemInstance> equippedItems = new ArrayList<>();
+        for(Slot slot : slots){
+            if(slot.isUsed() == true){
+                equippedItems.add(slot.getEquippedItem());
+            }
+        }
+
+        return equippedItems;
     }
 
     public void add(Slot slotToAdd) throws IllegalStateException{
@@ -24,6 +46,7 @@ public class Equipment implements Container{
                 throw new IllegalStateException("Already has the slot.");
         }
 
+        slotToAdd.setEquipment(this);
         this.slots.add(slotToAdd);
     }
 
@@ -33,19 +56,20 @@ public class Equipment implements Container{
         }
     }
 
-    public Item remove(Slot slot) throws IllegalStateException{
+    public ItemInstance remove(Slot slot) throws IllegalStateException{
         if(this.slots.contains(slot) == false)
             throw new IllegalStateException("Slot is not owned by this equipment.");
 
+        slot.setEquipment(null);
         this.slots.remove(slot);
         return slot.getEquippedItem();
     }
 
-    public Collection<Item> remove(Collection<Slot> slotsToRemove) throws IllegalStateException{
-        List<Item> itemsRemoved = new ArrayList<>();
+    public Collection<ItemInstance> remove(Collection<Slot> slotsToRemove) throws IllegalStateException{
+        List<ItemInstance> itemsRemoved = new ArrayList<>();
 
         for(Slot slot : slotsToRemove){
-            Item item = this.remove(slot);
+            ItemInstance item = this.remove(slot);
             if(item != null){
                 itemsRemoved.add(item);
             }
@@ -54,33 +78,35 @@ public class Equipment implements Container{
         return itemsRemoved;
     }
 
-    public void add(Item item) throws ContainerFullException, ItemAlreadyContainedException{
+    public void add(ItemInstance item) throws ContainerFullException, ItemAlreadyContainedException{
         if(item == null) 
             throw new NullPointerException("Item to add cannot be null.");
 
-        if(this.equippedItems.contains(item) == true)
+        if(getEquippedItems().contains(item) == true)
             throw new ItemAlreadyContainedException(this, item);
 
         this.equip(item);
     }
 
-    public boolean contains(Item o){
-        return this.equippedItems.contains(o);
+    public boolean contains(ItemInstance o){
+        return this.getEquippedItems().contains(o);
     }
 
-    public void remove(Item itemToRemove) {
-        if(this.equippedItems.contains(itemToRemove) == false)
+    public void remove(ItemInstance itemToRemove) {
+        if(this.getEquippedItems().contains(itemToRemove) == false)
             return;
 
         for(Slot slot : slots){
+            if(slot.getEquippedItem() == null)
+                continue;
+
             if(slot.getEquippedItem().equals(itemToRemove) == true){
                 slot.unequip();
             }
         }
-        this.equippedItems.remove(itemToRemove);
     }
 
-    private void equip(Item item) throws ContainerFullException, IllegalStateException{
+    private void equip(ItemInstance item) throws ContainerFullException, IllegalStateException{
         if(item.isEquippable() == false)
             throw new IllegalStateException("Cannot equip a non-equippable item.");
 
@@ -99,9 +125,6 @@ public class Equipment implements Container{
 
         if(slotsToUse.size() != zonesToUse.size())
             throw new IllegalStateException("Not found the zones to equip an item");
-
-        this.equippedItems.add(item);
-        item.setContainedIn(this);
 
         for(Slot slot : slotsToUse){
             slot.equip(item);

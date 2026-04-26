@@ -1,6 +1,6 @@
 package Entities.Character.Stats.StatData;
 
-public enum StatCategory implements StatModifiable{
+public enum StatCategory{
     PYSHICAL,
     MENTAL,
     SPIRITUAL;

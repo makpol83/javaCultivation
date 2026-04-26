@@ -4,10 +4,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "power_systems")
 public class PowerSystem {
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
     private String name;
+    
+    @DatabaseField
     private String description;
-    private List<PowerStepType> steps = new ArrayList<>();
+
+    @ForeignCollectionField(eager = true)
+    private Collection<PowerStepType> steps;
+
+    public PowerSystem(){}
     
     public PowerSystem(String name, String description, Collection<PowerStepType> steps){
         if(name == null)
@@ -26,7 +42,7 @@ public class PowerSystem {
         this.steps.addAll(steps);
     }
 
-    public String getName(){ return this.name; }
-    public String getDescription(){ return this.description; }
+    public String getName(){ return new String(this.name); }
+    public String getDescription(){ return new String(this.description); }
     public List<PowerStepType> getPowerSteps(){ return List.copyOf(steps); }
 }

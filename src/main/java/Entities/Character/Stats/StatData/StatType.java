@@ -1,6 +1,6 @@
 package Entities.Character.Stats.StatData;
 
-public enum StatType implements StatModifiable{
+public enum StatType{
     STRENGTH(StatCategory.PYSHICAL),
     VELOCITY(StatCategory.PYSHICAL),
     AGILITY(StatCategory.PYSHICAL),

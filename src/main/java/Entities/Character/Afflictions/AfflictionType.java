@@ -1,15 +1,35 @@
 package Entities.Character.Afflictions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "affliction_types")
 public class AfflictionType {
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField(canBeNull = false, unique = true)
     private String name;
+
+    @DatabaseField
     private String description;
+
+    @DatabaseField
     private String cause;
+
+    @DatabaseField
     private String cure;
 
-    private List<AfflictionLevel> levels = new ArrayList<>();
+    @ForeignCollectionField(eager = true)
+    private Collection<AfflictionLevel> levels = new ArrayList<>();
+
+    public AfflictionType(){}
 
     public AfflictionType(String name, String description, String cause, String cure, List<AfflictionLevel> levels){
         if(name == null)
@@ -68,7 +88,7 @@ public class AfflictionType {
         this.cure = new String(cure);
     }
 
-    public List<AfflictionLevel> getLevels(){
+    public Collection<AfflictionLevel> getLevels(){
         return List.copyOf(levels);
     }
 

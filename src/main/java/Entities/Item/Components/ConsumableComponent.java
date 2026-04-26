@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "consumable_components")
-public class ConsumableComponent implements Cloneable{
+public class ConsumableComponent{
 
     @DatabaseField(generatedId = true)
     private long id;
@@ -79,10 +79,5 @@ public class ConsumableComponent implements Cloneable{
 
     public void setEffect(String newEffect){
         this.effect = new String(newEffect);
-    }
-
-    @Override
-    public ConsumableComponent clone(){
-        return new ConsumableComponent(availableUses, maxUses, isRefillable, effect);
     }
 }

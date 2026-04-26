@@ -4,22 +4,47 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import Entities.Character.Stats.StatData.StatHistory;
 import Entities.Character.Stats.StatData.StatModifier;
 import Entities.Character.Stats.StatData.StatQuality;
 import Entities.Character.Stats.StatData.StatType;
+import PowerSystem.PowerStepType;
 
+@DatabaseTable(tableName = "stats")
 public class Stat {
-    private double baseMultiplier = 1.0;
-    private int value = 1;
-    private StatQuality quality = StatQuality.AVERAGE;
-    private StatType type = null;
-    private List<StatModifier> modifiers = null;
 
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
+    private double baseMultiplier = 1.0;
+    
+    @DatabaseField
+    private int value = 1;
+    
+    @DatabaseField(dataType = com.j256.ormlite.field.DataType.ENUM_STRING)
+    private StatQuality quality = StatQuality.AVERAGE;
+    
+    @DatabaseField(dataType = DataType.ENUM_STRING, columnName = "stat_type")
+    private StatType type = null;
+
+    @ForeignCollectionField(eager = true)
+    private Collection<StatModifier> modifiers = null;
+
+    @DatabaseField
     private boolean isVisible = false;
+
+    @DatabaseField
     private boolean isPaused = true;
 
     private StatHistory statHistory = new StatHistory();
+
+    public Stat(){}
 
     public Stat(
         double baseMultiplier, 
@@ -89,7 +114,7 @@ public class Stat {
         return true;
     }
 
-    public void saveStatOnHistory(){
-        this.statHistory.addStat(this);
+    public void saveStatOnHistory(PowerStepType stepAssociated){
+        this.statHistory.addStat(this, stepAssociated);
     }
 }

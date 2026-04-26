@@ -11,7 +11,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "equipable_components")
-public class EquipableComponent implements Cloneable {
+public class EquipableComponent{
 
     @DatabaseField(generatedId = true)
     private long id;
@@ -118,11 +118,5 @@ public class EquipableComponent implements Cloneable {
         // Gson convierte el texto de vuelta a una lista de Enums
         Type listType = new TypeToken<ArrayList<EquippableZone>>(){}.getType();
         return gson.fromJson(zonesJson, listType);
-    }
-
-    @Override
-    public EquipableComponent clone(){
-        DurabilityComponent durabData = new DurabilityComponent(durabilityData.getActualDurability(), durabilityData.getMaxDurability(), durabilityData.isRepairable(), durabilityData.canBeRepairedIfBroken(), new String(durabilityData.getRepairMethod()));
-        return new EquipableComponent(pyshicalArmorPoints, spiritualArmorPoints, criticalPyshicalDefenseModifier, criticalSpiritualDefenseModifier, baseDamage, criticalDamageModifier, new String(equippableEffect), durabData, getZonesNeededToEquip());
     }
 }

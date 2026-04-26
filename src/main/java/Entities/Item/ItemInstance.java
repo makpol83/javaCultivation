@@ -2,6 +2,10 @@ package Entities.Item;
 
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import Entities.Entity;
 import Entities.EntityType;
 import Entities.Interfaces.Container;
@@ -11,12 +15,28 @@ import Entities.Item.Components.EquipableComponent;
 import Exceptions.Item.ContainerFullException;
 import Exceptions.Item.ItemAlreadyContainedException;
 
+@DatabaseTable(tableName = "item_instances")
 public class ItemInstance extends Entity implements Container{
+
+    @DatabaseField
     private Item originalItem;
 
-    private EquipableComponent equipableComponent;
-    private ConsumableComponent consumableComponent;
+    @DatabaseField
+    private String equipableComponentJSON;
+
+    @DatabaseField
+    private String consumableComponentJSON;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     private Inventory inventoryData;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Inventory containedIn;
+
+    private static final Gson gson = new Gson();
+
+    private transient EquipableComponent cachedEquipable;
+    private transient ConsumableComponent cachedConsumable;
 
     public ItemInstance(){
 
@@ -30,17 +50,20 @@ public class ItemInstance extends Entity implements Container{
             DurabilityComponent dc = ec.getDurabilityData();
             DurabilityComponent dcToAdd = new DurabilityComponent(dc.getActualDurability(), dc.getMaxDurability(), dc.isRepairable(), dc.canBeRepairedIfBroken(), dc.getRepairMethod());
 
-            this.equipableComponent = new EquipableComponent(ec.getPyshicalArmorPoints(), ec.getSpiritualArmorPoints(), ec.getCriticalPyshicalDefenseModifier(), ec.getCriticalSpiritualDefenseModifier(), ec.getBaseDamage(), ec.getCriticalDamageModifier(), ec.getEquippableEffect(), dcToAdd, ec.getZonesNeededToEquip());
+            EquipableComponent finalec = new EquipableComponent(ec.getPyshicalArmorPoints(), ec.getSpiritualArmorPoints(), ec.getCriticalPyshicalDefenseModifier(), ec.getCriticalSpiritualDefenseModifier(), ec.getBaseDamage(), ec.getCriticalDamageModifier(), ec.getEquippableEffect(), dcToAdd, ec.getZonesNeededToEquip());
+            this.equipableComponentJSON = gson.toJson(finalec);
+
         } else {
-            this.equipableComponent = null;
+            this.equipableComponentJSON = null;
         }
 
         if(originalItem.isConsumable() == true){
             ConsumableComponent cc = originalItem.getConsumableData();
 
-            this.consumableComponent = new ConsumableComponent(cc.getAvailableUses(), cc.getMaxUses(), cc.isRefillable(), cc.getEffect());
+            ConsumableComponent ccFinal = new ConsumableComponent(cc.getAvailableUses(), cc.getMaxUses(), cc.isRefillable(), cc.getEffect());
+            this.consumableComponentJSON = gson.toJson(ccFinal);
         } else {
-            this.consumableComponent = null;
+            this.consumableComponentJSON = null;
         }
 
         if(originalItem.hasInventory() == true){
@@ -48,6 +71,11 @@ public class ItemInstance extends Entity implements Container{
         } else {
             this.inventoryData = null;
         }
+    }
+
+    public void setInventoryContainer(Inventory inventory){
+        //can be null
+        this.containedIn = inventory;
     }
 
     public void add(ItemInstance item) throws IllegalStateException, ContainerFullException, ItemAlreadyContainedException{
@@ -97,11 +125,27 @@ public class ItemInstance extends Entity implements Container{
     }
 
     public EquipableComponent getEquipableData() {
-        return equipableComponent;
+        if (cachedEquipable == null && equipableComponentJSON != null) {
+            cachedEquipable = gson.fromJson(equipableComponentJSON, EquipableComponent.class);
+        }
+        return cachedEquipable;
+    }
+
+    public void updateEquipableData(EquipableComponent ec){
+        this.cachedEquipable = ec;
+        this.equipableComponentJSON = gson.toJson(ec);
     }
 
     public ConsumableComponent getConsumableData() {
-        return consumableComponent;
+        if (cachedConsumable == null && consumableComponentJSON != null) {
+            cachedConsumable = gson.fromJson(consumableComponentJSON, ConsumableComponent.class);
+        }
+        return cachedConsumable;
+    }
+
+    public void updateConsumableData(ConsumableComponent cc){
+        this.cachedConsumable = cc;
+        this.consumableComponentJSON = gson.toJson(cc);
     }
 
     public Inventory getInventoryOfItem(){
@@ -109,17 +153,11 @@ public class ItemInstance extends Entity implements Container{
     }
 
     public boolean isEquippable(){
-        if(equipableComponent == null)
-            return false;
-
-        return true;
+        return originalItem.isEquippable();
     }
 
     public boolean isConsumable(){
-        if(consumableComponent == null)
-            return false;
-
-        return true;
+        return originalItem.isConsumable();
     }
 
     public boolean hasInventory(){

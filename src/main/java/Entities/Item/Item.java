@@ -8,7 +8,7 @@ import Entities.EntityType;
 import Entities.Item.Components.ConsumableComponent;
 import Entities.Item.Components.EquipableComponent;
 
-@DatabaseTable(tableName = "item_instances")
+@DatabaseTable(tableName = "item_types")
 public class Item extends Entity {
 
     @DatabaseField
@@ -33,8 +33,7 @@ public class Item extends Entity {
     private Inventory inventoryData; //If it has an inventory
 
     public Item(String name, String description, double capacityRequired, boolean isRedimensionable,
-            EquipableComponent equipableData, ConsumableComponent consumableData, Inventory inventoryData,
-            Inventory containedIn){
+            EquipableComponent equipableData, ConsumableComponent consumableData, Inventory inventoryData){
         super();
 
         if(name == null)

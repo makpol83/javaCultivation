@@ -1,8 +1,21 @@
 package Entities.Character.Afflictions;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "afflictions")
 public class Affliction {
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private AfflictionType type;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private AfflictionLevel level;
+
+    public Affliction(){}
 
     public Affliction(AfflictionType type, AfflictionLevel level) {
         if(type == null)

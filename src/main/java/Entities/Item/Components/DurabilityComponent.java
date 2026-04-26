@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "durability_components")
-public class DurabilityComponent implements Cloneable{
+public class DurabilityComponent{
     
     @DatabaseField(generatedId = true)
     private long id;
@@ -84,10 +84,5 @@ public class DurabilityComponent implements Cloneable{
 
         this.actualDurability = this.actualDurability + this.maxDurability*percentage;
         if(this.actualDurability < 0) this.actualDurability = 0;
-    }
-
-    @Override
-    public DurabilityComponent clone(){
-        return new DurabilityComponent(actualDurability, maxDurability, isRepairable, canBeRepairedIfBroken, new String(repairMethod));
     }
 }

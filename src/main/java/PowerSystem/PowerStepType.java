@@ -1,28 +1,57 @@
 package PowerSystem;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
 import PowerSystem.PowerStepData.AdvanceType;
 import PowerSystem.PowerStepData.CharacterModifier;
-import PowerSystem.PowerStepData.SpecialCharacterModifiers;
+import PowerSystem.PowerStepData.SpecialCharacterModifier;
 
+@DatabaseTable(tableName = "power_steps_types")
 public class PowerStepType {
+    
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField(foreign = true, columnName = "system_id")
+    private PowerSystem powerSystem;
+
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String description;
+    @DatabaseField
     private int minimumStatValue;
+    @DatabaseField
     private int maximumStatValue;
 
-    private List<PowerStepType> subLevels = new ArrayList<>();
+    @ForeignCollectionField(eager = true)
+    private Collection<PowerStepType> subLevels = new ArrayList<>();
+
+    @DatabaseField(foreign = true, columnName = "parent_id", canBeNull = true)
     private PowerStepType parentLevel;
 
+    @DatabaseField(foreign = true, columnName = "previous_step_id")
     private PowerStepType previousStep;
+
+    @DatabaseField(foreign = true, columnName = "next_step_id")
     private PowerStepType nextStep;
 
-    private List<AdvanceType> advanceTypes = new ArrayList<>();
+    @ForeignCollectionField(eager = true)
+    private Collection<AdvanceType> advanceTypes = new ArrayList<>();
 
-    private List<CharacterModifier> dataModifiers = new ArrayList<>();
-    private List<SpecialCharacterModifiers> abstractModifiers = new ArrayList<>();
+    @ForeignCollectionField(eager = true)
+    private Collection<CharacterModifier> dataModifiers = new ArrayList<>();
+
+    @ForeignCollectionField(eager = true)
+    private Collection<SpecialCharacterModifier> abstractModifiers = new ArrayList<>();
+
+    public PowerStepType(){}
     
     public PowerStepType(
             String name,
@@ -35,7 +64,8 @@ public class PowerStepType {
             PowerStepType nextStep,
             List<AdvanceType> advanceTypes,
             List<CharacterModifier> dataModifiers,
-            List<SpecialCharacterModifiers> abstractModifiers) {
+            List<SpecialCharacterModifier> abstractModifiers,
+            PowerSystem system) {
         if (name == null)
             throw new NullPointerException("Name cannot be null.");
         if (description == null)
@@ -59,6 +89,8 @@ public class PowerStepType {
             this.dataModifiers.addAll(dataModifiers);
         if (abstractModifiers != null)
             this.abstractModifiers.addAll(abstractModifiers);
+
+        this.powerSystem = system;
     }
     
     public String getName() {
@@ -77,8 +109,8 @@ public class PowerStepType {
         return maximumStatValue;
     }
 
-    public List<PowerStepType> getSubLevels() {
-        return subLevels;
+    public Collection<PowerStepType> getSubLevels() {
+        return List.copyOf(subLevels);
     }
 
     public PowerStepType getParentLevel() {
@@ -93,18 +125,27 @@ public class PowerStepType {
         return nextStep;
     }
 
-    public List<AdvanceType> getAdvanceTypes() {
-        return advanceTypes;
+    public Collection<AdvanceType> getAdvanceTypes() {
+        return List.copyOf(advanceTypes);
     }
 
-    public List<CharacterModifier> getDataModifiers() {
-        return dataModifiers;
+    public Collection<CharacterModifier> getDataModifiers() {
+        return List.copyOf(dataModifiers);
     }
 
-    public List<SpecialCharacterModifiers> getAbstractModifiers() {
-        return abstractModifiers;
+    public Collection<SpecialCharacterModifier> getAbstractModifiers() {
+        return List.copyOf(abstractModifiers);
     }
 
+    public void add(AdvanceType advance){
+        this.advanceTypes.add(advance);
+        advance.setPowerStep(this);
+    }
+
+    public void remove(AdvanceType advance){
+        this.advanceTypes.remove(advance);
+        advance.setPowerStep(null);
+    }
     
 
 

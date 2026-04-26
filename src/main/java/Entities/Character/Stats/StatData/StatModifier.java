@@ -1,10 +1,19 @@
 package Entities.Character.Stats.StatData;
 
-public class StatModifier {
-    private double multiplierModifier = 1.0;
-    private StatModifiable statAffected = StatType.STRENGTH;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-    public StatModifier(double multiplierModifier, StatModifiable statAffected) throws IllegalStateException{
+@DatabaseTable(tableName = "stat_modifiers")
+public class StatModifier {
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
+    private double multiplierModifier = 1.0;
+    private StatType statAffected = StatType.STRENGTH;
+
+    public StatModifier(double multiplierModifier, StatType statAffected) throws IllegalStateException{
         if(multiplierModifier < 0)
             throw new IllegalStateException("Multiplier modifer cannot be null.");
 
@@ -16,5 +25,5 @@ public class StatModifier {
     }
 
     public double getMultiplierModifier(){ return this.multiplierModifier; }
-    public StatModifiable statAffected(){ return this.statAffected; }
+    public StatType statAffected(){ return this.statAffected; }
 }

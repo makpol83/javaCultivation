@@ -1,22 +1,34 @@
 package Entities.Character.Stats.FunctionalParameters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
+@DatabaseTable(tableName = "functional_parameters")
 public class FunctionalParameter {
-    private double actualValue;
-    private double maxValue;
 
-    private List<FunctionalParameterModifier> modifiers = new ArrayList<>();
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
+    private double actualValue;
+
+    @DatabaseField
+    private double maxValue;
     
+    @DatabaseField(dataType = com.j256.ormlite.field.DataType.ENUM_STRING)
     private FunctionalParameterType type;
 
-    public FunctionalParameter(double maxValue, FunctionalParameterType type, Collection<FunctionalParameterModifier> modifiers){
+    public FunctionalParameter(){}
+
+    public FunctionalParameter(double maxValue, FunctionalParameterType type){
+        if(maxValue < 0)
+            throw new IllegalArgumentException("Max value is not valid, >= 0");
+
+        if(type == null)
+            throw new NullPointerException("Type cannot be null");
+
         this.maxValue = maxValue;
         this.actualValue = maxValue;
-
-        this.modifiers.addAll(modifiers);
 
         this.type = type;
     }
@@ -31,14 +43,4 @@ public class FunctionalParameter {
 
         this.actualValue -= value;
     }
-
-    public void addModifier(FunctionalParameterModifier modifier){
-        this.modifiers.add(modifier);
-    }
-
-    public void removeModifier(FunctionalParameterModifier modifier){
-        this.modifiers.remove(modifier);
-    }
-
-    public List<FunctionalParameterModifier> getModifiers(){ return List.copyOf(this.modifiers); }
 }

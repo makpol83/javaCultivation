@@ -1,23 +1,38 @@
 package Entities.Character.Stats.StatData;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import Entities.Character.Stats.Stat;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
 
+import Entities.Character.Stats.Stat;
+import PowerSystem.PowerStepType;
+
+@DatabaseTable(tableName = "stat_historials")
 public class StatHistory {
-    private List<StatPowerStepFinalInstance> statInstances = new ArrayList<>();
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @ForeignCollectionField(eager = true)
+    private Collection<StatPowerStepFinalInstance> statInstances = new ArrayList<>();
 
     public StatHistory(){
         
     }
 
-    public boolean addStat(Stat stat){
+    public boolean addStat(Stat stat, PowerStepType type){
         if(stat == null)
             throw new NullPointerException("Stat cannot be null.");
 
-        return this.statInstances.add(new StatPowerStepFinalInstance(stat));
+        if(type == null)
+            throw new NullPointerException("Type cannot be null.");
+
+        return this.statInstances.add(new StatPowerStepFinalInstance(stat, type));
     }
 
-    public List<StatPowerStepFinalInstance> getStatInstances(){ return List.copyOf(this.statInstances); }
+    public Collection<StatPowerStepFinalInstance> getStatInstances(){ return List.copyOf(this.statInstances); }
 }
