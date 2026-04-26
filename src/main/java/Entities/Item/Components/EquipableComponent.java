@@ -18,26 +18,27 @@ public class EquipableComponent{
 
     @DatabaseField
     private int pyshicalArmorPoints;
-
+    
     @DatabaseField
     private int spiritualArmorPoints;
-
+    
     @DatabaseField
     private int criticalPyshicalDefenseModifier;
-
+    
     @DatabaseField
     private int criticalSpiritualDefenseModifier;
-
+    
     @DatabaseField
     private double baseDamage;
-
+    
     @DatabaseField
     private double criticalDamageModifier;
-
+    
     @DatabaseField
     private String equippableEffect;
+    
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false)
     private DurabilityComponent durabilityData;
 
     //We have to save as a json due to database capabilites
@@ -47,7 +48,6 @@ public class EquipableComponent{
     //Created to avoid creating one each time its used
     private static final Gson gson = new Gson();
 
-    //Used by ORMLite
     public EquipableComponent(){}
     
     public EquipableComponent(int pyshicalArmorPoints, int spiritualArmorPoints, int criticalPyshicalDefenseModifier,
@@ -80,7 +80,7 @@ public class EquipableComponent{
         this.criticalSpiritualDefenseModifier = criticalSpiritualDefenseModifier;
         this.baseDamage = baseDamage;
         this.criticalDamageModifier = criticalDamageModifier;
-        this.equippableEffect = new String(equippableEffect);
+        this.equippableEffect = equippableEffect;
         this.durabilityData = durabilityData;
         this.zonesJson = gson.toJson(zonesNeededToEquipAdd);
     }
@@ -104,13 +104,14 @@ public class EquipableComponent{
     }
     public String getEquippableEffect() {
         if(equippableEffect == null)
-            return new String("Sin efecto.");
+            return "Sin efecto.";
 
-        return new String(equippableEffect);
+        return equippableEffect;
     }
     public DurabilityComponent getDurabilityData() {
         return durabilityData;
     }
+
     public List<EquippableZone> getZonesNeededToEquip() {
         if (zonesJson == null || zonesJson.isEmpty()) {
             return new ArrayList<>();

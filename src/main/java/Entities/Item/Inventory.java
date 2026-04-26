@@ -8,12 +8,11 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import Entities.Interfaces.Container;
-import Exceptions.Item.ContainerFullException;
+import Exceptions.Item.InventoryFullException;
 import Exceptions.Item.ItemAlreadyContainedException;
 
 @DatabaseTable(tableName = "inventories")
-public class Inventory implements Container{
+public class Inventory{
     @DatabaseField(generatedId = true)
     private long id;
 
@@ -28,13 +27,11 @@ public class Inventory implements Container{
 
     protected Inventory() {}
 
-    public Inventory(double baseCapacity, Collection<ItemInstance> itemsStoredadd, ItemInstance itemAssociated){
+    public Inventory(double baseCapacity, ItemInstance itemAssociated){
         if(baseCapacity <= 0)
             throw new IllegalArgumentException("Base capacity cannot be 0 or negative");
 
         this.baseCapacity = baseCapacity;
-        if(itemsStoredadd != null)
-            this.itemsStored.addAll(itemsStored);
         this.itemAssociated = itemAssociated;
     }
 
@@ -59,9 +56,10 @@ public class Inventory implements Container{
         return baseCapacity - actualCapacity;
     }
 
-    public void add(ItemInstance item) throws ContainerFullException, ItemAlreadyContainedException{
-        if(item.getCapacityRequired() > getActualCapacity())
-            throw new ContainerFullException(this);
+    public void add(ItemInstance item) throws InventoryFullException, ItemAlreadyContainedException{
+        double actualCapacity = getActualCapacity();
+        if(item.getCapacityRequired() + actualCapacity > this.baseCapacity)
+            throw new InventoryFullException(this);
 
         if(this.itemsStored.contains(item) == true)
             throw new ItemAlreadyContainedException(this, item);
@@ -78,7 +76,6 @@ public class Inventory implements Container{
         this.itemsStored.remove(item);
     }
 
-    @Override
     public boolean contains(ItemInstance item){
         return this.itemsStored.contains(item);
     }

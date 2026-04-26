@@ -2,9 +2,11 @@ package PowerSystem.PowerStepData;
 
 import javax.xml.crypto.Data;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import Entities.Character.Characterr;
 import Entities.Character.Stats.Stat;
 import Entities.Character.Stats.StatData.StatType;
 
@@ -14,7 +16,7 @@ public class DataRequirement{
     @DatabaseField(generatedId = true)
     private long id;
 
-    
+    @DatabaseField(dataType = DataType.ENUM_STRING)
     private StatType statToLookFor;
 
     @DatabaseField
@@ -40,7 +42,7 @@ public class DataRequirement{
         this.advanceAssociated = advanceAssociated;
     }
 
-    public boolean isFulfilled(Character character){
+    public boolean isFulfilled(Characterr character){
         // TODO --> IMPLEMENT with stats
         return false;
     }

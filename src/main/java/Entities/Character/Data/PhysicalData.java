@@ -1,11 +1,26 @@
 package Entities.Character.Data;
 
-public class PyshicalData {
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
+@DatabaseTable(tableName = "pyshical_data")
+public class PhysicalData {
+
+    @DatabaseField(generatedId = true)
+    private long id;
+
+    @DatabaseField
     private double lifespan;
+
+    @DatabaseField
     private int age;
+
+    @DatabaseField
     private String gender;
+
+    public PhysicalData(){}
     
-    public PyshicalData(double lifespan, int age, String gender) {
+    public PhysicalData(double lifespan, int age, String gender) {
         if(lifespan < 0)
             throw new IllegalArgumentException("Lifespan can't be negative.");
 
@@ -20,7 +35,7 @@ public class PyshicalData {
 
         this.lifespan = lifespan;
         this.age = age;
-        this.gender = new String(gender);
+        this.gender = gender;
     }
 
     public double getLifespan() {
@@ -30,7 +45,7 @@ public class PyshicalData {
         return age;
     }
     public String getGender() {
-        return new String(gender);
+        return gender;
     }
 
     public void setLifespan(double lifespanToSet) {

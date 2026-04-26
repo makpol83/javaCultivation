@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.xml.crypto.Data;
-
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import Entities.Character.Characterr;
 import PowerSystem.PowerStepType;
 
 @DatabaseTable(tableName = "advance_types")
@@ -32,18 +31,12 @@ public class AdvanceType {
 
     public AdvanceType(){}
 
-    public AdvanceType(double statMultiplier, Collection<AbstractRequirement> abstractRequirements, Collection<DataRequirement> dataRequirements, PowerStepType powerStepAssociated){
+    public AdvanceType(double statMultiplier, PowerStepType powerStepAssociated){
         if(statMultiplier < 0)
             throw new IllegalArgumentException("Stat multiplier cannot be negative.");
 
-        if(abstractRequirements != null)
-            this.abstractRequirements.addAll(abstractRequirements);
-
         if(powerStepAssociated == null)
             throw new NullPointerException("Power step cannot be null.");
-
-        if(dataRequirements != null)
-            this.dataRequirements.addAll(dataRequirements);
 
         this.statMultiplier = statMultiplier;
         this.powerStepAssociated = powerStepAssociated;
@@ -71,14 +64,14 @@ public class AdvanceType {
 
     public double getStatMultiplier(){ return this.statMultiplier; }
 
-    public boolean canAdvanceViaDataRequirements(Character character){
+    public boolean canAdvanceViaDataRequirements(Characterr character){
         if(getDataRequirementTypesFulfilled(character).size() == this.dataRequirements.size())
             return true;
 
         return false;
     }
 
-    public Collection<DataRequirement> getDataRequirementTypesFulfilled(Character character){
+    public Collection<DataRequirement> getDataRequirementTypesFulfilled(Characterr character){
         List<DataRequirement> fulfilled = new ArrayList<>();
         for(DataRequirement requirement : this.dataRequirements){
             if(requirement.isFulfilled(character) == true){

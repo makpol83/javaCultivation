@@ -1,5 +1,6 @@
 package Entities.Character.Equipment;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -12,7 +13,7 @@ public class Slot {
     @DatabaseField(generatedId = true)
     private long id;
 
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false)
+    @DatabaseField(dataType = DataType.ENUM_STRING, canBeNull = false)
     private EquippableZone zone;
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = true)

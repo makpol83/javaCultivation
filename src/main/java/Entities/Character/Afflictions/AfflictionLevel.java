@@ -11,6 +11,8 @@ public class AfflictionLevel {
 
     @DatabaseField
     private String onRolEffect;
+    
+    //Add support to add data modifiers
 
     //Owner is affliction type
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "type_id")
@@ -25,12 +27,12 @@ public class AfflictionLevel {
         if(type == null)
             throw new NullPointerException("Type can't be null.");
 
-        this.onRolEffect = new String(onRolEffect);
+        this.onRolEffect = onRolEffect;
         this.type = type;
     }
 
     public String getOnRolEffect() {
-        return new String(onRolEffect);
+        return onRolEffect;
     }
 
     public AfflictionType getAfflictionType() {

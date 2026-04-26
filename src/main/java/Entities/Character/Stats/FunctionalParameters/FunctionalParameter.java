@@ -37,10 +37,9 @@ public class FunctionalParameter {
     public double getMaxValue(){ return this.maxValue; }
     public FunctionalParameterType getType(){ return this.type; }
     public void modifyValue(double value){
-        if(this.actualValue - value < 0){
-            value = this.actualValue - value;
-        }
-
         this.actualValue -= value;
+
+        if(this.actualValue < 0)
+            this.actualValue = 0;
     }
 }

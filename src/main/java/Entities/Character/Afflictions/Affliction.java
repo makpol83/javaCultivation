@@ -3,6 +3,8 @@ package Entities.Character.Afflictions;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import Entities.Character.Characterr;
+
 @DatabaseTable(tableName = "afflictions")
 public class Affliction {
 
@@ -14,6 +16,9 @@ public class Affliction {
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private AfflictionLevel level;
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "character_id")
+    private Characterr character;
 
     public Affliction(){}
 

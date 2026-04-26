@@ -24,16 +24,16 @@ public class AbstractRequirement{
         if(advanceAssociated == null)
             throw new NullPointerException("Advance type cannot be null");
 
-        this.requirement = new String(requirement);
+        this.requirement = requirement;
         this.advanceAssociated = advanceAssociated;
     }
 
-    public String getRequirement(){ return new String(this.requirement); }
+    public String getRequirement(){ return this.requirement; }
 
     public void setRequirement(String requirement){
         if(requirement == null)
             throw new NullPointerException("Requirement cannot be null");
 
-        this.requirement = new String(requirement);
+        this.requirement = requirement;
     }
 }

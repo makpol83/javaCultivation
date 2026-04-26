@@ -5,7 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "durability_components")
 public class DurabilityComponent{
-    
+
     @DatabaseField(generatedId = true)
     private long id;
 
@@ -24,8 +24,7 @@ public class DurabilityComponent{
     @DatabaseField
     private String repairMethod;
 
-    //Used by ORMLite
-    protected DurabilityComponent(){}
+    public DurabilityComponent(){}
 
     public DurabilityComponent(double actualDurability, double maxDurability, boolean isRepairable, boolean canBeRepairedIfBroken, String repairMethod){
         if(actualDurability < 0)
@@ -44,7 +43,7 @@ public class DurabilityComponent{
         this.maxDurability = maxDurability;
         this.isRepairable = isRepairable;
         this.canBeRepairedIfBroken = canBeRepairedIfBroken;
-        this.repairMethod = new String(repairMethod);
+        this.repairMethod = repairMethod;
     }
 
     public double getActualDurability(){ return this.actualDurability; }
@@ -62,7 +61,7 @@ public class DurabilityComponent{
     }
 
     public String getRepairMethod() {
-        return new String(repairMethod);
+        return repairMethod;
     }
 
     public void damage(double percentage){
@@ -83,6 +82,6 @@ public class DurabilityComponent{
             throw new IllegalStateException("Item cannot be repaired if broken");
 
         this.actualDurability = this.actualDurability + this.maxDurability*percentage;
-        if(this.actualDurability < 0) this.actualDurability = 0;
+        if(this.actualDurability > this.maxDurability) this.actualDurability = this.maxDurability;
     }
 }

@@ -8,26 +8,21 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import Entities.Interfaces.Container;
 import Entities.Item.ItemInstance;
 import Entities.Item.Components.EquippableZone;
-import Exceptions.Item.ContainerFullException;
+import Exceptions.Item.InventoryFullException;
 import Exceptions.Item.ItemAlreadyContainedException;
 
 @DatabaseTable(tableName = "equipments")
-public class Equipment implements Container{
+public class Equipment{
 
     @DatabaseField(generatedId = true)
     private long id;
 
-    @ForeignCollectionField(eager = true)
-    private Collection<Slot> slots = new ArrayList<>();
+    @ForeignCollectionField(foreignFieldName = "equipment")
+    private Collection<Slot> slots;
 
-    public Equipment(){}
-
-    public Equipment(Collection<Slot> slots){
-        this.slots.addAll(slots);
-    }
+    public Equipment(){ slots = new ArrayList<>();}
 
     public Collection<ItemInstance> getEquippedItems(){
         Collection<ItemInstance> equippedItems = new ArrayList<>();
@@ -78,12 +73,12 @@ public class Equipment implements Container{
         return itemsRemoved;
     }
 
-    public void add(ItemInstance item) throws ContainerFullException, ItemAlreadyContainedException{
+    public void add(ItemInstance item) throws InventoryFullException, ItemAlreadyContainedException{
         if(item == null) 
             throw new NullPointerException("Item to add cannot be null.");
 
         if(getEquippedItems().contains(item) == true)
-            throw new ItemAlreadyContainedException(this, item);
+            throw new ItemAlreadyContainedException(null, item);
 
         this.equip(item);
     }
@@ -106,7 +101,7 @@ public class Equipment implements Container{
         }
     }
 
-    private void equip(ItemInstance item) throws ContainerFullException, IllegalStateException{
+    private void equip(ItemInstance item) throws InventoryFullException, IllegalStateException{
         if(item.isEquippable() == false)
             throw new IllegalStateException("Cannot equip a non-equippable item.");
 

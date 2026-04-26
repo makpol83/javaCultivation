@@ -9,8 +9,10 @@ import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import PowerSystem.PowerStepData.AdvanceType;
-import PowerSystem.PowerStepData.CharacterModifier;
 import PowerSystem.PowerStepData.SpecialCharacterModifier;
+import PowerSystem.PowerStepData.CharacterModifiers.StatCharModifier;
+
+import Entities.Character.Characterr;
 
 @DatabaseTable(tableName = "power_steps_types")
 public class PowerStepType {
@@ -36,17 +38,17 @@ public class PowerStepType {
     @DatabaseField(foreign = true, columnName = "parent_id", canBeNull = true)
     private PowerStepType parentLevel;
 
-    @DatabaseField(foreign = true, columnName = "previous_step_id")
+    @DatabaseField(foreign = true, columnName = "previous_step_id", canBeNull = true)
     private PowerStepType previousStep;
 
-    @DatabaseField(foreign = true, columnName = "next_step_id")
+    @DatabaseField(foreign = true, columnName = "next_step_id", canBeNull = true)
     private PowerStepType nextStep;
 
     @ForeignCollectionField(eager = true)
     private Collection<AdvanceType> advanceTypes = new ArrayList<>();
 
-    @ForeignCollectionField(eager = true)
-    private Collection<CharacterModifier> dataModifiers = new ArrayList<>();
+    @ForeignCollectionField(eager = true, foreignFieldName = "powerStepType")
+    private Collection<StatCharModifier> dataModifiers = new ArrayList<>();
 
     @ForeignCollectionField(eager = true)
     private Collection<SpecialCharacterModifier> abstractModifiers = new ArrayList<>();
@@ -58,13 +60,9 @@ public class PowerStepType {
             String description,
             int minimumStatValue,
             int maximumStatValue,
-            List<PowerStepType> subLevels,
             PowerStepType parentLevel,
             PowerStepType previousStep,
             PowerStepType nextStep,
-            List<AdvanceType> advanceTypes,
-            List<CharacterModifier> dataModifiers,
-            List<SpecialCharacterModifier> abstractModifiers,
             PowerSystem system) {
         if (name == null)
             throw new NullPointerException("Name cannot be null.");
@@ -78,19 +76,67 @@ public class PowerStepType {
         this.minimumStatValue = minimumStatValue;
         this.maximumStatValue = maximumStatValue;
 
-        if (subLevels != null)
-            this.subLevels.addAll(subLevels);
         this.parentLevel = parentLevel;
         this.previousStep = previousStep;
         this.nextStep = nextStep;
 
-        this.advanceTypes.addAll(advanceTypes);
-        if (dataModifiers != null)
-            this.dataModifiers.addAll(dataModifiers);
-        if (abstractModifiers != null)
-            this.abstractModifiers.addAll(abstractModifiers);
-
         this.powerSystem = system;
+    }
+
+    public void setParent(PowerStepType step){
+        this.parentLevel = step;
+    }
+
+    public void add(PowerStepType type){
+        if(this.subLevels.contains(type) == false){
+            this.subLevels.add(type);
+            type.setParent(type);
+        }
+    }
+
+    public void remove(PowerStepType type){
+        if(this.subLevels.contains(type) == true){
+            this.subLevels.remove(type);
+            type.setParent(null);
+        }
+    }
+
+    public void add(AdvanceType advance){
+        if(this.advanceTypes.contains(advance) == false){
+            this.advanceTypes.add(advance);
+            advance.setPowerStep(this);
+        }
+    }
+
+    public void remove(AdvanceType advance){
+        if(this.advanceTypes.contains(advance) == true){
+            this.advanceTypes.remove(advance);
+            advance.setPowerStep(null);
+        }
+    }
+
+    public void addCharacterModifier(StatCharModifier modifier){
+        if(this.dataModifiers.contains(modifier) == false){
+            this.dataModifiers.add(modifier);
+        }
+    }
+
+    public void removeCharacterModifier(StatCharModifier modifier){
+        if(this.dataModifiers.contains(modifier) == true){
+            this.dataModifiers.remove(modifier);
+        }
+    }
+
+    public void addSpecialCharacterModifier(SpecialCharacterModifier modifier){
+        if(this.abstractModifiers.contains(modifier) == false){
+            this.abstractModifiers.add(modifier);
+        }
+    }
+
+    public void removeSpecialCharacterModifier(SpecialCharacterModifier modifier){
+        if(this.abstractModifiers.contains(modifier) == true){
+            this.abstractModifiers.remove(modifier);
+        }
     }
     
     public String getName() {
@@ -129,24 +175,18 @@ public class PowerStepType {
         return List.copyOf(advanceTypes);
     }
 
-    public Collection<CharacterModifier> getDataModifiers() {
+    public Collection<StatCharModifier> getDataModifiers() {
         return List.copyOf(dataModifiers);
     }
 
     public Collection<SpecialCharacterModifier> getAbstractModifiers() {
         return List.copyOf(abstractModifiers);
     }
-
-    public void add(AdvanceType advance){
-        this.advanceTypes.add(advance);
-        advance.setPowerStep(this);
-    }
-
-    public void remove(AdvanceType advance){
-        this.advanceTypes.remove(advance);
-        advance.setPowerStep(null);
-    }
     
-
+    public void applyModifiers(Characterr character){
+        for(StatCharModifier modifier : this.dataModifiers){
+            modifier.realizeChanges(character);
+        }
+    }
 
 }

@@ -17,13 +17,10 @@ public class StatData {
     private long id;
 
     @ForeignCollectionField(eager = true)
-    private Collection<Stat> stats = new ArrayList<>();
+    private Collection<Stat> stats;
 
-    public StatData(){}
-
-    public StatData(Collection<Stat> stats){
-        if(stats != null)
-            this.stats.addAll(stats);
+    public StatData(){
+        this.stats = new ArrayList<>();
     }
 
     public void addStat(Stat statToAdd) throws IllegalStateException{
@@ -31,6 +28,8 @@ public class StatData {
             if(stat.getType().equals(statToAdd.getType()) == true)
                 throw new IllegalStateException("Stat is already added to the stat data.");
         }
+
+        this.stats.add(statToAdd);
     }
 
     public void removeStat(Stat statToRemove){

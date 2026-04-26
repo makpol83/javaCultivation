@@ -1,11 +1,11 @@
 package Entities.Character.Stats.StatData;
 
 public enum StatType{
-    STRENGTH(StatCategory.PYSHICAL),
-    VELOCITY(StatCategory.PYSHICAL),
-    AGILITY(StatCategory.PYSHICAL),
-    RESISTANCE(StatCategory.PYSHICAL),
-    VITALITY(StatCategory.PYSHICAL),
+    STRENGTH(StatCategory.PHYSICAL),
+    VELOCITY(StatCategory.PHYSICAL),
+    AGILITY(StatCategory.PHYSICAL),
+    RESISTANCE(StatCategory.PHYSICAL),
+    VITALITY(StatCategory.PHYSICAL),
     INTELLIGENCE(StatCategory.MENTAL),
     REFLEX(StatCategory.MENTAL),
     PRESENCE(StatCategory.MENTAL),
@@ -14,7 +14,7 @@ public enum StatType{
     QI_QUANTITY(StatCategory.SPIRITUAL),
     CONCENTRATION(StatCategory.SPIRITUAL);
 
-    private StatCategory category = StatCategory.PYSHICAL;
+    private StatCategory category = StatCategory.PHYSICAL;
 
     private StatType(StatCategory category){
         this.category = category;

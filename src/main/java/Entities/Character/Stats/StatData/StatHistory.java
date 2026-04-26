@@ -31,7 +31,7 @@ public class StatHistory {
         if(type == null)
             throw new NullPointerException("Type cannot be null.");
 
-        return this.statInstances.add(new StatPowerStepFinalInstance(stat, type));
+        return this.statInstances.add(new StatPowerStepFinalInstance(stat, type, this));
     }
 
     public Collection<StatPowerStepFinalInstance> getStatInstances(){ return List.copyOf(this.statInstances); }

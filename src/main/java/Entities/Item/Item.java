@@ -32,6 +32,8 @@ public class Item extends Entity {
     @DatabaseField(foreign = true, foreignAutoRefresh = true, foreignAutoCreate = true)
     private Inventory inventoryData; //If it has an inventory
 
+    public Item(){}
+
     public Item(String name, String description, double capacityRequired, boolean isRedimensionable,
             EquipableComponent equipableData, ConsumableComponent consumableData, Inventory inventoryData){
         super();
@@ -45,8 +47,8 @@ public class Item extends Entity {
         if(capacityRequired < 0)
             throw new IllegalArgumentException("Capacity required must be >= 0.");
 
-        this.name = new String(name);
-        this.description = new String(description);
+        this.name = name;
+        this.description = description;
         this.capacityRequired = capacityRequired;
         this.isRedimensionable = isRedimensionable;
         this.equipableData = equipableData;
@@ -55,11 +57,11 @@ public class Item extends Entity {
     }
 
     public String getName() {
-        return new String(name);
+        return name;
     }
 
     public String getDescription() {
-        return new String(description);
+        return description;
     }
 
     public double getCapacityRequired() {

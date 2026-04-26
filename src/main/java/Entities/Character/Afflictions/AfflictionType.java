@@ -27,7 +27,7 @@ public class AfflictionType {
     private String cure;
 
     @ForeignCollectionField(eager = true)
-    private Collection<AfflictionLevel> levels = new ArrayList<>();
+    private Collection<AfflictionLevel> levels;
 
     public AfflictionType(){}
 
@@ -47,45 +47,47 @@ public class AfflictionType {
         if(levels.size() == 0)
             throw new IllegalArgumentException("Must have at least one level");
 
-        this.name = new String(name);
-        this.description = new String(description);
-        this.cause = new String(cause);
-        this.cure = new String(cure);
+        this.levels = new ArrayList<>();
+
+        this.name = name;
+        this.description = description;
+        this.cause = cause;
+        this.cure = cure;
         this.levels.addAll(levels);
     }
 
     public String getName() {
-        return new String(name);
+        return name;
     }
     public void setName(String name) {
         if(name == null)
             throw new NullPointerException("Name can't be null.");
-        this.name = new String(name);
+        this.name = name;
     }
     public String getDescription() {
-        return new String(description);
+        return description;
     }
     public void setDescription(String description) {
         if(description == null)
             throw new NullPointerException("Description can't be null.");
 
-        this.description = new String(description);
+        this.description = description;
     }
     public String getCause() {
-        return new String(cause);
+        return cause;
     }
     public void setCause(String cause) {
         if(cause == null)
             throw new NullPointerException("Cause can't be null.");
-        this.cause = new String(cause);
+        this.cause = cause;
     }
     public String getCure() {
-        return new String(cure);
+        return cure;
     }
     public void setCure(String cure) {
         if(cure == null)
             throw new NullPointerException("Cure can't be null.");
-        this.cure = new String(cure);
+        this.cure = cure;
     }
 
     public Collection<AfflictionLevel> getLevels(){

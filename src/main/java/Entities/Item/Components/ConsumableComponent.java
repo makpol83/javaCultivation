@@ -21,15 +21,17 @@ public class ConsumableComponent{
     @DatabaseField
     private String effect;
 
+    public ConsumableComponent(){}
+
     public ConsumableComponent(int availableUses, int maxUses, boolean isRefillable, String effect)
     {
-        if(this.availableUses < 0)
+        if(availableUses < 0)
             throw new IllegalArgumentException("Uses cannot be below 0.");
 
-        if(this.availableUses > maxUses)
+        if(availableUses > maxUses)
             throw new IllegalArgumentException("Uses cannot be above maxUses.");
 
-        if(this.maxUses < 0)
+        if(maxUses < 0)
             throw new IllegalArgumentException("Max uses cannot be below 0.");
 
         if(effect == null || effect.length() == 0)
@@ -38,7 +40,7 @@ public class ConsumableComponent{
         this.availableUses = availableUses;
         this.maxUses = maxUses;
         this.isRefillable = isRefillable;
-        this.effect = new String(effect);
+        this.effect = effect;
     }
 
     public int getAvailableUses() {
@@ -51,7 +53,7 @@ public class ConsumableComponent{
         return isRefillable;
     }
     public String getEffect() {
-        return new String(effect);
+        return effect;
     }
 
     public void use() throws 
@@ -78,6 +80,6 @@ public class ConsumableComponent{
     }
 
     public void setEffect(String newEffect){
-        this.effect = new String(newEffect);
+        this.effect = newEffect;
     }
 }
